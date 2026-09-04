@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nail Glam - Premium Secure Checkout" />
+  <title>Checkout | Nail Glam 💅</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Checkout Page specific layout */
+    .checkout-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    h2.checkout-title {
+      grid-column: 1 / -1;
+      color: var(--primary);
+      font-size: 2rem;
+      text-shadow: 0 2px 8px var(--primary-glow);
+      margin-bottom: 10px;
+    }
+
+    .checkout-section {
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .checkout-section h3 {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    /* Address Grid */
+    .address-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .address-grid .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* Payment Methods Options */
+    .payment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .pay-option-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-surface-solid);
+      cursor: pointer;
+      transition: all 0.3s;
+      user-select: none;
+    }
+    .pay-option-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .pay-option-card:active {
+      transform: translateY(0);
+    }
+    .pay-option-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+      background: linear-gradient(135deg, hsla(var(--primary-hue), 35%, 52%, 0.08), hsla(24, 35%, 60%, 0.06));
+    }
+    .pay-option-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .pay-option-left input[type="radio"] {
+      accent-color: var(--primary);
+      transform: scale(1.2);
+      margin: 0;
+    }
+    .pay-logo {
+      height: 24px;
+      max-width: 60px;
+      object-fit: contain;
+    }
+
+    /* Sticky Sidebar Order Summary */
+    .order-summary-sidebar {
+      position: sticky;
+      top: 70px;
+      height: fit-content;
+      padding: 25px;
+    }
+    .summary-items-list {
+      max-height: 240px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding-right: 5px;
+    }
+    .summary-product-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .summary-product-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .summary-item-details {
+      flex-grow: 1;
+    }
+    .summary-item-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .summary-item-price {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+    
+    .billing-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    .billing-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+    .billing-row.total-row {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--secondary);
+      padding-top: 10px;
+    }
+
+    /* Success Screen Modal */
+    .success-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 9, 15, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .success-card {
+      text-align: center;
+      padding: 40px;
+      max-width: 480px;
+      width: 90%;
+    }
+    .success-icon {
+      font-size: 4rem;
+      color: #4caf50;
+      margin-bottom: 20px;
+      animation: popOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+    }
+    @keyframes popOut {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    .success-card h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .success-card p {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    @media(max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
+        padding-bottom: 80px;
+      }
+      .order-summary-sidebar {
+        position: static;
+      }
+    }
+
+    @media(max-width: 480px) {
+      .payment-options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div id="bubbleContainer">
+    <div class="bubble small pink"></div>
+    <div class="bubble medium purple"></div>
+    <div class="bubble large blue"></div>
+    <div class="bubble small purple"></div>
+    <div class="bubble medium pink"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo-group" onclick="window.location.href='home.html'" style="cursor: pointer;">
+      <img src="nglogo.png" alt="Nail Glam logo" class="header-logo" />
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="window.location.href='home.html'">← Back to Shop</button>
+    </div>
+  </header>
+
+  <!-- Checkout Grid Container -->
+  <main class="checkout-container">
+    <h2 class="checkout-title">Secure Checkout 🔒</h2>
+
+    <!-- Left Column: Forms -->
+    <div class="checkout-forms-column">
+      
+      <!-- Step 1: Shipping Address -->
+      <section class="checkout-section card-glass">
+        <h3><span>📍</span> Delivery Information</h3>
+        <form id="addressForm">
+          <div class="address-grid">
+            <div class="form-group full-width">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Jane Doe" autocomplete="name" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" class="form-control" placeholder="10-digit number" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" required />
+            </div>
+            <div class="form-group">
+              <label for="pincode">Pincode / ZIP</label>
+              <input type="text" id="pincode" class="form-control" placeholder="400001" pattern="[0-9]{6}" maxlength="6" autocomplete="postal-code" required />
+            </div>
+            <div class="form-group full-width">
+              <label for="address">Street Address & Landmark</label>
+              <textarea id="address" class="form-control" placeholder="Flat No., Street Name, Landmark" rows="3" autocomplete="street-address" required></textarea>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Step 2: Payment Options -->
+      <section class="checkout-section card-glass">
+        <h3><span>💳</span> Select Payment Method</h3>
+        <div class="payment-options-grid">
+          
+          <!-- Cash on Delivery -->
+          <div class="pay-option-card active" onclick="selectPaymentMethod('COD')">
+            <div class="pay-option-left">
+              <input type="radio" id="payCOD" name="paymentOption" value="COD" checked />
+              <label for="payCOD" style="cursor: pointer; font-weight: inherit;">Cash on Delivery (COD)</label>
+            </div>
+            <span>💵</span>
+          </div>
+
+          <!-- GPay -->
+          <div class="pay-option-card" onclick="selectPaymentMethod('GPay')">
+            <div class="pay-option-left">
+              <input type="radio" id="payGPay" name="paymentOption" value="GPay" />
+              <label for="payGPay" style="cursor: pointer; font-weight: inherit;">Google Pay</label>
+            </div>
+            <img class="pay-logo" src="https://i.pinimg.com/736x/60/5a/bd/605abdb7af3405c6b20a426b1e128322.jpg" alt="Google Pay" />
+          </div>
+
+          <!-- PhonePe -->
+          <div class="pay-option-card" onclick="selectPaymentMethod('PhonePe')">
+            <div class="pay-option-left">
+              <input type="radio" id="payPhonePe" name="paymentOption" value="PhonePe" />
+              <label for="payPhonePe" style="cursor: pointer; font-weight: inherit;">PhonePe</label>
+            </div>
+            <img class="pay-logo" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/phonepe-icon.png" alt="PhonePe" />
+          </div>
+
+          <!-- Paytm -->
+          <div class="pay-option-card" onclick="selectPaymentMethod('Paytm')">
+            <div class="pay-option-left">
+              <input type="radio" id="payPaytm" name="paymentOption" value="Paytm" />
+              <label for="payPaytm" style="cursor: pointer; font-weight: inherit;">Paytm</label>
+            </div>
+            <img class="pay-logo" src="https://upload.wikimedia.org/wikipedia/commons/4/42/Paytm_logo.png" alt="Paytm" />
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Sticky Summary -->
+    <div class="checkout-summary-column">
+      <section class="order-summary-sidebar card-glass">
+        <h3 style="border-bottom: 2px solid var(--primary); padding-bottom: 8px;">Order Summary</h3>
+        
+        <!-- Summary items list -->
+        <div class="summary-items-list" id="summaryItemsList">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Billing details -->
+        <div class="billing-breakdown">
+          <div class="billing-row">
+            <span>Subtotal</span>
+            <span id="billSubtotal">₹0</span>
+          </div>
+          <div class="billing-row">
+            <span>Shipping</span>
+            <span id="billShipping">FREE</span>
+          </div>
+          <div class="billing-row">
+            <span>Tax / GST</span>
+            <span>₹0</span>
+          </div>
+          <div class="billing-row total-row">
+            <span>Payable Total</span>
+            <span id="billGrandTotal">₹0</span>
+          </div>
+        </div>
+
+        <button id="placeOrderBtn" class="btn btn-primary place-order-btn" style="width: 100%; padding: 14px;" onclick="placeOrder()">Place Order 💅</button>
+      </section>
+    </div>
+  </main>
+
+  <!-- Success Notification Screen Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-card card-glass">
+      <div class="success-icon">🎉</div>
+      <h2>Order Confirmed!</h2>
+      <p id="successMessage">Thank you! Your luxury nail art order has been successfully scheduled.</p>
+      <div class="billing-breakdown" style="border: 1px dashed var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+        <div class="billing-row" style="font-size: 0.9rem;">
+          <span>Deliver to:</span>
+          <strong id="successName">Jane Doe</strong>
+        </div>
+        <div class="billing-row" style="font-size: 0.9rem;">
+          <span>Method:</span>
+          <strong id="successMethod">Cash on Delivery</strong>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="window.location.href='orders.html'" style="width: 100%;">Track My Order 🛍️</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKuFqq1jYeUon9DgqMnaq6vg1tYDdTnPo",
+      authDomain: "website-9a715.firebaseapp.com",
+      projectId: "website-9a715",
+      storageBucket: "website-9a715.firebasestorage.app",
+      messagingSenderId: "1006565436423",
+      appId: "1:1006565436423:web:a97c2176e5ead19a350ea2",
+      measurementId: "G-TC1052C9MT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Parse params and localStorage
+    const params = new URLSearchParams(window.location.search);
+    const isCart = params.get("cart") === "true";
+    let singleName = params.get("product");
+    let singlePrice = Number(params.get("price")) || 0;
+    let singleImage = params.get("image");
+    let singleQty = Number(params.get("qty")) || 1;
+
+    let checkoutItems = [];
+    let grandTotal = 0;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Build order items
+      if (isCart) {
+        const cartKey = currentUser ? ("cartItems_" + currentUser.uid) : "cartItems_guest";
+        const cartData = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        cartData.forEach(item => {
+          const price = Number(item.price) || 0;
+          const qty = Number(item.qty) || 1;
+          grandTotal += price * qty;
+          checkoutItems.push({
+            name: item.name,
+            price: price,
+            qty: qty,
+            image: item.image || ""
+          });
+        });
+      } else if (singleName) {
+        grandTotal = singlePrice;
+        checkoutItems.push({
+          name: singleName,
+          price: singlePrice / singleQty, // unit price
+          qty: singleQty,
+          image: singleImage || "https://cdn-icons-png.flaticon.com/512/263/263142.png"
+        });
+      }
+
+      // Populate summary views
+      const summaryList = document.getElementById("summaryItemsList");
+      summaryList.innerHTML = "";
+      
+      checkoutItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "summary-product-item";
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="summary-item-details">
+            <div class="summary-item-name">${item.name}</div>
+            <div class="summary-item-price">₹${item.price} x ${item.qty}</div>
+          </div>
+          <div style="font-weight: 600;">₹${item.price * item.qty}</div>
+        `;
+        summaryList.appendChild(div);
+      });
+
+      document.getElementById("billSubtotal").textContent = `₹${grandTotal}`;
+      document.getElementById("billGrandTotal").textContent = `₹${grandTotal}`;
+
+      // Set default input styles
+      const bubbles = document.querySelectorAll(".bubble");
+      bubbles.forEach(b => {
+        b.style.left = `${Math.random() * 90}%`;
+        b.style.animationDelay = `${Math.random() * 10}s`;
+      });
+
+      // Prefill delivery form from saved profile
+      const profileKey = currentUser ? ("userProfile_" + currentUser.uid) : "userProfile_guest";
+      const savedProfile = localStorage.getItem(profileKey);
+      if (savedProfile) {
+        try {
+          const pf = JSON.parse(savedProfile);
+          if (pf.fullName) document.getElementById("name").value = pf.fullName;
+          if (pf.phone) document.getElementById("phone").value = pf.phone;
+          if (pf.pincode) document.getElementById("pincode").value = pf.pincode;
+          if (pf.address) document.getElementById("address").value = pf.address;
+        } catch (e) { /* ignore malformed profile */ }
+      }
+    });
+
+    // Place Order handler
+    window.placeOrder = async function() {
+      // Must be logged in to place an order (data isolation per user)
+      if (!currentUser) {
+        showToast("⚠️ Please log in to place your order.");
+        setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        return;
+      }
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const paymentMethod = document.querySelector('input[name="paymentOption"]:checked').value;
+      const btn = document.getElementById("placeOrderBtn");
+      const userId = currentUser.uid;
+
+      if (!name || !phone || !pincode || !address) {
+        showToast("⚠️ Please fill in all delivery details.");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(phone)) {
+        showToast("⚠️ Phone number must be exactly 10 digits.");
+        return;
+      }
+      if (!/^[0-9]{6}$/.test(pincode)) {
+        showToast("⚠️ Pincode must be exactly 6 digits.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Processing Securely...";
+
+      let cloudSave = true;
+
+      try {
+        const orderData = {
+          userId: userId,
+          customerName: name,
+          address: `${address}, Pin: ${pincode}`,
+          phone: phone,
+          paymentMethod: paymentMethod,
+          items: checkoutItems,
+          total: grandTotal,
+          date: new Date().toLocaleString('en-IN'),
+          status: "Pending"
+        };
+
+        // Save order doc to Firestore
+        await addDoc(collection(db, "orders"), orderData);
+
+      } catch (error) {
+        console.warn("Firestore save failed (falling back to local only):", error);
+        cloudSave = false;
+      }
+
+      // Always save the order locally so it reflects on the orders page,
+      // even when Firestore security rules block the cloud write.
+      try {
+        const localOrdersKey = "nailArtLocalOrders_" + userId;
+        const localOrders = JSON.parse(localStorage.getItem(localOrdersKey) || "[]");
+        localOrders.push({
+          id: "local-" + Date.now(),
+          ...{
+            userId: userId,
+            customerName: name,
+            address: `${address}, Pin: ${pincode}`,
+            phone: phone,
+            paymentMethod: paymentMethod,
+            items: checkoutItems,
+            total: grandTotal,
+            date: new Date().toLocaleString('en-IN'),
+            status: "Pending"
+          }
+        });
+        localStorage.setItem(localOrdersKey, JSON.stringify(localOrders));
+      } catch (e) {
+        console.warn("Could not save order locally:", e);
+      }
+
+      // Clear shopping cart on success
+      if (isCart) {
+        localStorage.removeItem("cartItems_" + userId);
+      }
+
+      // Flag so orders.html can show the success toast
+      localStorage.setItem("orderSuccessMsg", "🎉 Order placed successfully! #" + name + (cloudSave ? "" : " (saved on this device)"));
+
+      // Redirect to the orders page
+      window.location.href = "orders.html";
+    };
+  </script>
+
+  <!-- Interactive handlers -->
+  <script>
+    function selectPaymentMethod(method) {
+      document.querySelectorAll(".pay-option-card").forEach(card => card.classList.remove("active"));
+      
+      const targetCard = event.currentTarget;
+      targetCard.classList.add("active");
+      
+      const radio = targetCard.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+
+    function triggerConfetti() {
+      // Create lightweight CSS confetti falling across the overlay
+      const card = document.querySelector(".success-card");
+      for (let i = 0; i < 60; i++) {
+        const particle = document.createElement("div");
+        particle.style.position = "absolute";
+        particle.style.width = `${Math.random() * 8 + 4}px`;
+        particle.style.height = `${Math.random() * 8 + 4}px`;
+        particle.style.background = `hsl(${Math.random() * 360}, 90%, 65%)`;
+        particle.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+        particle.style.top = `-20px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        
+        // Random falling animation paths
+        const fallDuration = 2 + Math.random() * 2;
+        const drift = (Math.random() - 0.5) * 100;
+        particle.style.transition = `transform ${fallDuration}s linear, opacity ${fallDuration}s ease-out`;
+        
+        card.appendChild(particle);
+        
+        // Trigger render and animate
+        setTimeout(() => {
+          particle.style.transform = `translateY(${300 + Math.random() * 200}px) translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
+          particle.style.opacity = "0";
+        }, 50);
+
+        // cleanup
+        setTimeout(() => {
+          particle.remove();
+        }, fallDuration * 1000);
+      }
+    }
+  </script>
+</body>
+</html>
