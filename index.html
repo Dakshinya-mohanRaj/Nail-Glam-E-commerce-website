@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Access your Nail Glam account. Explore and shop luxury nail products." />
+  <title>Nail Glam 💅 | Access Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .form-container {
+      display: flex;
+      width: 200%;
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    form {
+      flex: 1;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    form.active {
+      opacity: 1;
+    }
+
+    h2 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      text-shadow: 0 2px 10px var(--primary-glow);
+    }
+
+    .error-msg {
+      color: #ff4d4d;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .toggle-link {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+      text-align: center;
+      font-family: var(--font-body);
+      transition: color 0.3s;
+    }
+    .toggle-link:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+
+    .slide {
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div id="bubbleContainer">
+    <div class="bubble small pink"></div>
+    <div class="bubble medium purple"></div>
+    <div class="bubble large blue"></div>
+    <div class="bubble small purple"></div>
+    <div class="bubble medium pink"></div>
+  </div>
+
+  <div class="container card-glass">
+    <div class="form-container" id="formContainer">
+      
+      <!-- LOGIN FORM -->
+      <form id="loginForm" class="active">
+        <h2>Welcome Back 💖</h2>
+        
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        
+        <button type="button" id="loginBtn" class="btn btn-primary">Login 💅</button>
+        <p class="error-msg" id="loginError"></p>
+        
+        <button type="button" class="toggle-link" id="toSignup">Create an Account →</button>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signupForm">
+        <h2>Create Account 💅</h2>
+        
+        <div class="form-group">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" class="form-control" placeholder="Jane Doe" autocomplete="name" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" class="form-control" placeholder="••••••••" autocomplete="new-password" required />
+        </div>
+        
+        <button type="button" id="signupBtn" class="btn btn-primary">Sign Up 🌸</button>
+        <p class="error-msg" id="signupError"></p>
+        
+        <button type="button" class="toggle-link" id="toLogin">← Back to Login</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKuFqq1jYeUon9DgqMnaq6vg1tYDdTnPo",
+      authDomain: "website-9a715.firebaseapp.com",
+      projectId: "website-9a715",
+      storageBucket: "website-9a715.firebasestorage.app",
+      messagingSenderId: "1006565436423",
+      appId: "1:1006565436423:web:a97c2176e5ead19a350ea2",
+      measurementId: "G-TC1052C9MT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ===================== LOGIN =====================
+    const loginBtn = document.getElementById("loginBtn");
+    loginBtn.addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const errorMsg = document.getElementById("loginError");
+
+      if (!email || !password) {
+        errorMsg.textContent = "⚠️ Please fill in all fields.";
+        return;
+      }
+
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Authenticating...";
+        await signInWithEmailAndPassword(auth, email, password);
+        errorMsg.textContent = "";
+        showToast('💅 Successfully Logged In!');
+        setTimeout(() => {
+          if (email === "admin@gmail.com") {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'home.html';
+          }
+        }, 1500);
+      } catch (error) {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login 💅";
+        errorMsg.textContent = "⚠️ " + getFriendlyErrorMessage(error.code);
+      }
+    });
+
+    // ===================== SIGNUP =====================
+    const signupBtn = document.getElementById("signupBtn");
+    signupBtn.addEventListener("click", async () => {
+      const name = document.getElementById("signupName").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value;
+      const errorMsg = document.getElementById("signupError");
+
+      if (!name || !email || !password) {
+        errorMsg.textContent = "⚠️ Please fill in all fields.";
+        return;
+      }
+
+      try {
+        signupBtn.disabled = true;
+        signupBtn.textContent = "Registering...";
+        await createUserWithEmailAndPassword(auth, email, password);
+        errorMsg.textContent = "";
+        showToast('🌸 Account Created Successfully! Logging you in...');
+        setTimeout(async () => {
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            window.location.href = 'home.html';
+          } catch {
+            toggleToLogin();
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Sign Up 🌸";
+          }
+        }, 1500);
+      } catch (error) {
+        signupBtn.disabled = false;
+        signupBtn.textContent = "Sign Up 🌸";
+        errorMsg.textContent = "⚠️ " + getFriendlyErrorMessage(error.code);
+      }
+    });
+
+    function getFriendlyErrorMessage(code) {
+      switch (code) {
+        case 'auth/invalid-email': return 'Invalid email address.';
+        case 'auth/user-disabled': return 'This account has been disabled.';
+        case 'auth/user-not-found': return 'Account not found. Please sign up.';
+        case 'auth/wrong-password': return 'Incorrect password.';
+        case 'auth/email-already-in-use': return 'Email already registered.';
+        case 'auth/weak-password': return 'Password should be at least 6 characters.';
+        default: return 'Authentication failed. Please try again.';
+      }
+    }
+
+    // ===================== ENTER KEY =====================
+    document.getElementById("loginForm").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        loginBtn.click();
+      }
+    });
+    document.getElementById("signupForm").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        signupBtn.click();
+      }
+    });
+
+    // ===================== TOGGLE ANIMATIONS =====================
+    const formContainer = document.getElementById("formContainer");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+
+    document.getElementById("toSignup").addEventListener("click", () => {
+      formContainer.classList.add("slide");
+      signupForm.classList.add("active");
+      loginForm.classList.remove("active");
+    });
+
+    document.getElementById("toLogin").addEventListener("click", toggleToLogin);
+
+    function toggleToLogin() {
+      formContainer.classList.remove("slide");
+      loginForm.classList.add("active");
+      signupForm.classList.remove("active");
+    }
+  
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    const bubbleContainer = document.getElementById("bubbleContainer");
+    const bubbles = Array.from(bubbleContainer.children);
+    bubbles.forEach(b => {
+      b.style.left = `${Math.random() * 90}%`;
+      b.style.animationDelay = `${Math.random() * 10}s`;
+    });
+  </script>
+
+</body>
+</html>
