@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My Orders - Nail Glam Order History & Live Tracking" />
+  <title>My Orders - Nail Glam 💅</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .orders-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+    }
+
+    h2.section-title {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 25px;
+      text-align: center;
+      text-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    .order-card {
+      margin-bottom: 25px;
+      padding: 25px;
+    }
+
+    /* Order Card Header Info */
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+    .order-meta-info div {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .order-meta-info strong {
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
+
+    /* Live Tracking Timeline styling */
+    .tracking-timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 30px 0 25px;
+      padding: 0 10px;
+      position: relative;
+    }
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+    .step-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-surface-solid);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .timeline-step.active .step-icon {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+    .timeline-step.active .step-label {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .timeline-line {
+      height: 4px;
+      background: var(--border-color);
+      flex-grow: 1;
+      margin: 0 -15px;
+      position: relative;
+      top: -14px;
+      z-index: 1;
+      border-radius: 2px;
+    }
+    .timeline-line.active {
+      background: var(--primary);
+    }
+
+    /* Items layout inside order history */
+    .order-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .ordered-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .ordered-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .ordered-item-info {
+      flex-grow: 1;
+    }
+    .ordered-item-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .ordered-item-price {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .order-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 60px 20px;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .back-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-surface-solid);
+      color: var(--primary);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 9999;
+      text-align: center;
+      max-width: 90vw;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div id="bubbleContainer">
+    <div class="bubble small pink"></div>
+    <div class="bubble medium purple"></div>
+    <div class="bubble large blue"></div>
+    <div class="bubble small purple"></div>
+    <div class="bubble medium pink"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo-group" onclick="window.location.href='home.html'" style="cursor: pointer;">
+      <img src="nglogo.png" alt="Nail Glam logo" class="header-logo" />
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="window.location.href='home.html'">← Back to Shop</button>
+    </div>
+  </header>
+
+  <!-- Orders container -->
+  <main class="orders-container">
+    <h2 class="section-title">Your Order History 🛍️</h2>
+    
+    <div id="orderList">
+      <div class="empty-orders">Loading orders history...</div>
+    </div>
+
+    <div class="back-nav">
+      <button class="btn btn-primary" onclick="window.location.href='home.html'">Continue Shopping</button>
+    </div>
+  </main>
+
+  <div id="toast"></div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKuFqq1jYeUon9DgqMnaq6vg1tYDdTnPo",
+      authDomain: "website-9a715.firebaseapp.com",
+      projectId: "website-9a715",
+      storageBucket: "website-9a715.firebasestorage.app",
+      messagingSenderId: "1006565436423",
+      appId: "1:1006565436423:web:a97c2176e5ead19a350ea2",
+      measurementId: "G-TC1052C9MT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const orderList = document.getElementById("orderList");
+
+    // Build an order card DOM element from an order object + id
+    function renderOrderCard(order, orderId) {
+      const card = document.createElement("div");
+      card.className = "order-card card-glass";
+
+      let itemsHTML = "";
+      if (Array.isArray(order.items) && order.items.length > 0) {
+        itemsHTML = order.items.map(item => {
+          const image = item.image || "https://via.placeholder.com/60";
+          const name = item.name || "Product";
+          const price = item.price || 0;
+          const qty = item.qty || 1;
+          return `
+            <div class="ordered-item">
+              <img src="${image}" alt="${name}">
+              <div class="ordered-item-info">
+                <div class="ordered-item-name">${name}</div>
+                <div class="ordered-item-price">Quantity: ${qty} • Price: ₹${price}</div>
+              </div>
+              <div style="font-weight: 700;">₹${price * qty}</div>
+            </div>
+          `;
+        }).join("");
+      } else {
+        itemsHTML = `<div style="font-style: italic; color: var(--text-muted);">No items details found</div>`;
+      }
+
+      const status = order.status || "Pending";
+
+      let step1Active = "active";
+      let step2Active = "";
+      let step3Active = "";
+      let line1Active = "";
+      let line2Active = "";
+
+      if (status === "Shipped") {
+        step2Active = "active";
+        line1Active = "active";
+      } else if (status === "Delivered") {
+        step2Active = "active";
+        step3Active = "active";
+        line1Active = "active";
+        line2Active = "active";
+      }
+
+      card.innerHTML = `
+        <div class="order-card-header">
+          <div class="order-meta-info">
+            <div>Order Ref: <strong>#${(orderId || "").substring(0, 8).toUpperCase()}</strong></div>
+            <div>Placed on: ${order.date || "N/A"}</div>
+          </div>
+          <div style="text-align: right;">
+            <span class="btn btn-secondary" style="font-size: 0.8rem; padding: 4px 10px; pointer-events: none;">${status}</span>
+          </div>
+        </div>
+
+        <!-- Live Tracking Timeline -->
+        <div class="tracking-timeline">
+          <div class="timeline-step ${step1Active}">
+            <span class="step-icon">✔</span>
+            <span class="step-label">Placed</span>
+          </div>
+          <div class="timeline-line ${line1Active}"></div>
+          <div class="timeline-step ${step2Active}">
+            <span class="step-icon">🚚</span>
+            <span class="step-label">Shipped</span>
+          </div>
+          <div class="timeline-line ${line2Active}"></div>
+          <div class="timeline-step ${step3Active}">
+            <span class="step-icon">🎁</span>
+            <span class="step-label">Delivered</span>
+          </div>
+        </div>
+
+        <!-- Items list -->
+        <div class="order-items-list">
+          ${itemsHTML}
+        </div>
+
+        <!-- Footer Details -->
+        <div class="order-card-footer">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Payment: <strong>${(order.paymentMethod || "N/A").toUpperCase()}</strong>
+          </div>
+          <div style="font-size: 1.15rem; font-weight: 800;">
+            Grand Total: <span style="color: var(--secondary);">₹${order.total || 0}</span>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // Build a unique fingerprint for an order so we can de-duplicate
+    // between the Firestore copy and the local-storage copy of the same order.
+    function orderKey(order) {
+      return [
+        order.date || "",
+        order.total || 0,
+        order.paymentMethod || "",
+        (order.items || []).map(it => (it.name || "") + "x" + (it.qty || 1)).join(",")
+      ].join("|");
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        orderList.innerHTML = '<div class="empty-orders">Please <a href="index.html" style="color: var(--primary); font-weight: 700; text-decoration: underline;">login</a> to view your orders.</div>';
+        return;
+      }
+
+      const uid = user.uid;
+      let cloudOrders = [];
+      let fetchedCloud = false;
+
+      try {
+        const q = query(
+          collection(db, "orders"),
+          where("userId", "==", uid)
+        );
+        const querySnapshot = await getDocs(q);
+        cloudOrders = [];
+        querySnapshot.forEach((docSnap) => {
+          cloudOrders.push({ id: docSnap.id, data: docSnap.data() });
+        });
+        fetchedCloud = true;
+      } catch (error) {
+        console.warn("Fetch orders from Firestore failed:", error);
+      }
+
+      // Merge locally saved orders for this user (per-user storage)
+      let localOrders = [];
+      try {
+        const localOrdersKey = "nailArtLocalOrders_" + uid;
+        localOrders = JSON.parse(localStorage.getItem(localOrdersKey) || "[]");
+      } catch (e) { /* ignore malformed local orders */ }
+
+      // De-duplicate: skip local copies that already exist in the cloud,
+      // so an order isn't shown twice (it's saved to both Firestore and localStorage).
+      const cloudKeys = new Set(cloudOrders.map(o => orderKey(o.data)));
+      const uniqueLocal = localOrders.filter(o => !cloudKeys.has(orderKey(o)));
+
+      const combined = [...cloudOrders, ...uniqueLocal.map(o => ({ id: o.id || ("local-" + Date.now()), data: o }))].reverse();
+
+      // Also prune the duplicate local entries from storage
+      try {
+        if (uniqueLocal.length !== localOrders.length) {
+          localStorage.setItem("nailArtLocalOrders_" + uid, JSON.stringify(uniqueLocal));
+        }
+      } catch (e) { /* ignore */ }
+
+      if (combined.length === 0) {
+        orderList.innerHTML = fetchedCloud
+          ? '<div class="empty-orders">No orders placed yet. Start glaming up your nails today! 🌸</div>'
+          : '<div class="empty-orders">⚠️ Could not load orders. Please check your connection or login again.</div>';
+        return;
+      }
+
+      orderList.innerHTML = ""; // Clear loader
+      combined.forEach(({ id, data }) => {
+        orderList.appendChild(renderOrderCard(data, id));
+      });
+
+      // Show success toast if we just placed an order
+      const successMsg = localStorage.getItem("orderSuccessMsg");
+      if (successMsg) {
+        showToast(successMsg);
+        localStorage.removeItem("orderSuccessMsg");
+      }
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+
+    const bubbles = document.querySelectorAll(".bubble");
+    bubbles.forEach(b => {
+      b.style.left = `${Math.random() * 90}%`;
+      b.style.animationDelay = `${Math.random() * 10}s`;
+    });
+  </script>
+</body>
+</html>
