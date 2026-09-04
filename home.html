@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Nail Glam - Shop premium nail art products, gel kits, press-ons, and luxury care." />
+  <title>Nail Glam - Shop 💅</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Home-specific styles and overrides */
+    
+    /* Hero Carousel Banner — multi-advertisement slider */
+    .hero-carousel {
+      width: 100%;
+      height: 380px;
+      margin-bottom: 40px;
+      border-radius: var(--corner-radius);
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, #1a1a2e, #2d1b3d);
+    }
+    .carousel-slide {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      padding: 1.5rem 4rem;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      pointer-events: none;
+    }
+    .carousel-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Blurred full-banner backdrop */
+    .carousel-backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      filter: blur(12px);
+      transform: scale(1.15);
+      opacity: 0.45;
+      z-index: 1;
+    }
+    /* Sharp centered image card */
+    .carousel-media {
+      position: relative;
+      z-index: 5;
+      flex-shrink: 0;
+      width: 230px;
+      height: 300px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      border: 2px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2a2a3a;
+    }
+    .carousel-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      image-rendering: auto;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      max-width: 520px;
+      animation: fadeInUp 1s ease;
+    }
+    .hero-content .badge {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+    .hero-content h2 {
+      font-size: 2.8rem;
+      font-family: 'Outfit', sans-serif;
+      margin-bottom: 15px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .hero-content p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      opacity: 0.95;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* Carousel prev/next arrows */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      opacity: 0.9;
+      transition: all 0.3s;
+    }
+    .carousel-arrow:hover {
+      background: var(--primary);
+      color: white;
+      opacity: 1;
+    }
+    .carousel-arrow.prev { left: 16px; }
+    .carousel-arrow.next { right: 16px; }
+
+    /* Carousel indicator dots */
+    .carousel-dots {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 20;
+    }
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0;
+    }
+    .carousel-dot.active {
+      background: var(--primary);
+      transform: scale(1.3);
+    }
+
+    /* Container for search & tabs */
+    .search-category-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    /* Modern Decoupled Search Field */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .search-wrapper input {
+      width: 100%;
+      padding: 16px 50px 16px 20px;
+      border-radius: 30px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-surface);
+      backdrop-filter: var(--glass-blur);
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      outline: none;
+      color: var(--text-main);
+      transition: all 0.3s;
+    }
+    .search-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-glow);
+    }
+    .search-wrapper .clear-btn {
+      position: absolute;
+      right: 120px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s;
+    }
+    .search-wrapper .clear-btn.visible {
+      opacity: 0.8;
+      pointer-events: auto;
+    }
+    .search-wrapper .clear-btn:hover {
+      color: var(--secondary);
+    }
+    .search-wrapper button {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+      padding: 0 25px;
+      border-radius: 25px;
+    }
+    .search-btn-icon {
+      display: none;
+    }
+
+    /* Category Filter Tabs */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: var(--bg-surface);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    /* Main Container Grid */
+    .shop-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 30px;
+    }
+
+    /* Premium Product Card */
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 16px;
+    }
+    .product-card .card-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: var(--secondary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 5;
+      box-shadow: var(--shadow-sm);
+    }
+    .product-card .img-wrapper {
+      width: 100%;
+      height: 220px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f0f0f0;
+      position: relative;
+      cursor: pointer;
+    }
+    .product-card .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .product-card:hover .img-wrapper img {
+      transform: scale(1.08);
+    }
+    .product-card .info-wrapper {
+      padding: 15px 5px 5px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .product-card h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .product-card h3:hover {
+      color: var(--primary);
+    }
+    .product-card .stars {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      color: #ffb100;
+      margin-bottom: 8px;
+    }
+    .product-card .stars span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .product-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-card .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-top: auto;
+      margin-bottom: 15px;
+    }
+    .product-card .price {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .product-card .original-price {
+      font-size: 0.9rem;
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+    .product-card .discount {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #4caf50;
+    }
+    .product-card .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .product-card .card-actions button {
+      padding: 10px 5px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+    }
+
+    /* Modal Product Details Style */
+    .modal-card {
+      position: relative;
+      width: 100%;
+      border-radius: var(--corner-radius);
+      padding: 30px;
+      overflow: hidden;
+    }
+    .close-modal-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 2rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s;
+      z-index: 10;
+    }
+    .close-modal-btn:hover {
+      color: var(--secondary);
+    }
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 30px;
+    }
+    .modal-img-container {
+      width: 100%;
+      height: 350px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+    }
+    .modal-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-badge {
+      align-self: flex-start;
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .modal-info h3 {
+      font-size: 1.8rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .modal-rating {
+      font-size: 0.9rem;
+      color: #ffb100;
+      margin-bottom: 15px;
+    }
+    .modal-rating span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+    .modal-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+    .modal-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+    .option-picker {
+      margin-bottom: 20px;
+    }
+    .option-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+    .swatches {
+      display: flex;
+      gap: 10px;
+    }
+    .swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+    .swatch.active {
+      border-color: var(--text-main);
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+    .qty-selector {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 25px;
+      background: var(--bg-surface-solid);
+    }
+    .qty-control-btn {
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text-main);
+    }
+    .qty-control-btn:hover {
+      color: var(--primary);
+    }
+    .qty-selector span {
+      padding: 0 15px;
+      font-weight: 600;
+      min-width: 40px;
+      text-align: center;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: auto;
+    }
+    .modal-actions button {
+      flex: 1;
+      padding: 14px;
+    }
+
+    @media(max-width: 768px) {
+      .hero-carousel {
+        height: 300px;
+      }
+      .carousel-slide {
+        padding: 0 1.5rem;
+        gap: 1.25rem;
+      }
+      .carousel-media {
+        width: 150px;
+        height: 190px;
+      }
+      .carousel-arrow {
+        width: 34px;
+        height: 34px;
+        font-size: 1.1rem;
+      }
+      .carousel-arrow.prev { left: 8px; }
+      .carousel-arrow.next { right: 8px; }
+      .hero-content h2 {
+        font-size: 1.8rem;
+      }
+      .hero-content p {
+        font-size: 0.95rem;
+      }
+      .modal-body {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .modal-img-container {
+        height: 200px;
+      }
+
+      /* Compact mobile search bar */
+      .search-wrapper {
+        max-width: 320px;
+      }
+      .search-wrapper input {
+        padding: 9px 50px 9px 18px;
+        font-size: 0.9rem;
+        border-radius: 24px;
+      }
+      .search-wrapper .clear-btn {
+        right: 52px;
+        font-size: 1.2rem;
+      }
+      .search-wrapper button {
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 1rem;
+      }
+      .search-btn-text {
+        display: none;
+      }
+      .search-btn-icon {
+        display: inline-flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div id="bubbleContainer">
+    <div class="bubble small pink"></div>
+    <div class="bubble medium purple"></div>
+    <div class="bubble large blue"></div>
+    <div class="bubble small purple"></div>
+    <div class="bubble medium pink"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo-group">
+      <img src="nglogo.png" alt="Nail Glam logo" class="header-logo" />
+    </div>
+    
+    <nav class="desktop-nav">
+      <a href="#" class="active">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+    
+    <div class="header-actions">
+      <!-- Dark Mode Switcher -->
+      <button id="themeToggleBtn" class="btn btn-secondary" style="padding: 8px 12px; font-size: 1.1rem; border-radius: 50%;" title="Toggle Theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      
+      <!-- User Profile -->
+      <div class="profile-btn" id="profileBtn" title="Profile" onclick="toggleProfileSidebar()"><span id="profileInitial">U</span></div>
+    </div>
+  </header>
+
+  <main class="shop-container">
+    
+    <!-- Promo Carousel (rotating ads) -->
+    <section class="hero-carousel" id="heroCarousel">
+      <div class="carousel-slide active">
+        <div class="carousel-backdrop" style="background-image: url('p20.jpg');"></div>
+        <div class="carousel-media">
+          <img src="p20.jpg" alt="Sculpt Your Perfect Style" class="carousel-img" />
+        </div>
+        <div class="hero-content">
+          <span class="badge">Limited Deal 🌸</span>
+          <h2>Sculpt Your Perfect Style</h2>
+          <p>Get professional, salon-quality luxury nails at home. Shop the new season collections today!</p>
+          <a href="#shop" class="btn btn-primary">Shop Gels & Tools</a>
+        </div>
+      </div>
+
+      <div class="carousel-slide">
+        <div class="carousel-backdrop" style="background-image: url('p5.jpeg');"></div>
+        <div class="carousel-media">
+          <img src="p5.jpeg" alt="Glossy Gel Polish Set" class="carousel-img" />
+        </div>
+        <div class="hero-content">
+          <span class="badge">New Arrival 💕</span>
+          <h2>Glossy Gel Polish Set</h2>
+          <p>Long-lasting, chip-free colours that keep your nails flawless for weeks.</p>
+          <a href="#shop" class="btn btn-primary">Grab the Deal</a>
+        </div>
+      </div>
+
+      <div class="carousel-slide">
+        <div class="carousel-backdrop" style="background-image: url('p11.jpeg');"></div>
+        <div class="carousel-media">
+          <img src="p11.jpeg" alt="Press-on Perfection" class="carousel-img" />
+        </div>
+        <div class="hero-content">
+          <span class="badge">Press-on Perfection ✨</span>
+          <h2>Salon Look, Zero Wait</h2>
+          <p>Effortless press-on nails in minutes — reusable and always on-trend.</p>
+          <a href="#shop" class="btn btn-primary">Shop Press-ons</a>
+        </div>
+      </div>
+
+      <div class="carousel-slide">
+        <div class="carousel-backdrop" style="background-image: url('P10.jpeg');"></div>
+        <div class="carousel-media">
+          <img src="P10.jpeg" alt="Care and Prep" class="carousel-img" />
+        </div>
+        <div class="hero-content">
+          <span class="badge">Care & Prep 🛡️</span>
+          <h2>Healthy Nails, Happy Hands</h2>
+          <p>Complete care kits to prep, protect and nourish your natural nails.</p>
+          <a href="#shop" class="btn btn-primary">Explore Care</a>
+        </div>
+      </div>
+
+      <button class="carousel-arrow prev" onclick="slideCarousel(-1)" aria-label="Previous ad">&#10094;</button>
+      <button class="carousel-arrow next" onclick="slideCarousel(1)" aria-label="Next ad">&#10095;</button>
+
+      <div class="carousel-dots" id="carouselDots"></div>
+    </section>
+
+    <!-- Search & Tabs Navigation -->
+    <div class="search-category-container" id="shop">
+      <search class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search premium nail art products..." />
+        <span id="searchClearBtn" class="clear-btn">&times;</span>
+        <button id="searchBtn" class="btn btn-primary"><span class="search-btn-text">Search</span><span class="search-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span></button>
+      </search>
+      
+      <div class="category-tabs">
+        <button class="tab-btn active" data-category="all">All Items</button>
+        <button class="tab-btn" data-category="gels">Gels & Polishes</button>
+        <button class="tab-btn" data-category="nails">Press-ons</button>
+        <button class="tab-btn" data-category="tools">Accessories & Tools</button>
+        <button class="tab-btn" data-category="care">Care & Prep</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="products-grid" id="productsGrid">
+      
+      <!-- Card 1 -->
+      <div class="product-card card-glass" data-category="gels" data-id="1">
+        <span class="card-badge">Best Seller</span>
+        <div class="img-wrapper" onclick="showProductDetails('Base Coat', 399, 'p1.jpeg', 'Premium hardening base coat to lock down polish, prevent yellowing, and strengthen the nail bed.', 4.9, 'gels')">
+          <img src="p1.jpeg" alt="Base Coat" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Base Coat', 399, 'p1.jpeg', 'Premium hardening base coat to lock down polish, prevent yellowing, and strengthen the nail bed.', 4.9, 'gels')">Base Coat</h3>
+          <div class="stars">★★★★★ <span>4.9</span></div>
+          <p>Strengthening base layer for perfect nails.</p>
+          <div class="price-row">
+            <span class="price">₹399</span>
+            <span class="original-price">₹599</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Base Coat', 399, 'p1.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Base Coat', 399, 'p1.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="product-card card-glass" data-category="gels" data-id="2">
+        <span class="card-badge">New</span>
+        <div class="img-wrapper" onclick="showProductDetails('Sculpting Poly Gel', 799, 'p2.jpeg', 'Professional-grade modeling sculpting gel. Very flexible, highly durable, and odorless.', 4.8, 'gels')">
+          <img src="p2.jpeg" alt="Sculpting Poly Gel" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Sculpting Poly Gel', 799, 'p2.jpeg', 'Professional-grade modeling sculpting gel. Very flexible, highly durable, and odorless.', 4.8, 'gels')">Sculpting Poly Gel</h3>
+          <div class="stars">★★★★☆ <span>4.8</span></div>
+          <p>Flexible and durable gel for nail sculpting.</p>
+          <div class="price-row">
+            <span class="price">₹799</span>
+            <span class="original-price">₹1099</span>
+            <span class="discount">27% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Sculpting Poly Gel', 799, 'p2.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Sculpting Poly Gel', 799, 'p2.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="product-card card-glass" data-category="nails" data-id="3">
+        <div class="img-wrapper" onclick="showProductDetails('Press-on Nails', 599, 'p3.jpeg', 'Premium press-on fake nail sets. Quick to apply, comes with high-bonding nail glue and tabs.', 4.5, 'nails')">
+          <img src="p3.jpeg" alt="Press-on Nails" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Press-on Nails', 599, 'p3.jpeg', 'Premium press-on fake nail sets. Quick to apply, comes with high-bonding nail glue and tabs.', 4.5, 'nails')">Press-on Nails</h3>
+          <div class="stars">★★★★☆ <span>4.5</span></div>
+          <p>Quick and stylish nails for everyday wear.</p>
+          <div class="price-row">
+            <span class="price">₹599</span>
+            <span class="original-price">₹799</span>
+            <span class="discount">25% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Press-on Nails', 599, 'p3.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Press-on Nails', 599, 'p3.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="product-card card-glass" data-category="care" data-id="4">
+        <div class="img-wrapper" onclick="showProductDetails('Nail Wipes', 149, 'p4.jpeg', 'Lint-free cotton nail wipes. Perfect for preparing nails with sanitizer or wiping gel residues.', 4.7, 'care')">
+          <img src="p4.jpeg" alt="Nail Wipes" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Nail Wipes', 149, 'p4.jpeg', 'Lint-free cotton nail wipes. Perfect for preparing nails with sanitizer or wiping gel residues.', 4.7, 'care')">Nail Wipes</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Essential wipes for clean and prepped nails.</p>
+          <div class="price-row">
+            <span class="price">₹149</span>
+            <span class="original-price">₹199</span>
+            <span class="discount">25% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Nail Wipes', 149, 'p4.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Nail Wipes', 149, 'p4.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="product-card card-glass" data-category="care" data-id="5">
+        <div class="img-wrapper" onclick="showProductDetails('Nail Remover', 199, 'p5.jpeg', 'Gentle, acetone-free nourishing polish remover. Safely dissolves coatings without stripping moisture.', 4.4, 'care')">
+          <img src="p5.jpeg" alt="Nail Remover" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Nail Remover', 199, 'p5.jpeg', 'Gentle, acetone-free nourishing polish remover. Safely dissolves coatings without stripping moisture.', 4.4, 'care')">Nail Remover</h3>
+          <div class="stars">★★★★☆ <span>4.4</span></div>
+          <p>Gentle formula to remove polish easily.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Nail Remover', 199, 'p5.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Nail Remover', 199, 'p5.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="product-card card-glass" data-category="gels" data-id="6">
+        <div class="img-wrapper" onclick="showProductDetails('Shell Nail Polish', 499, 'p6.jpeg', 'Shimmering natural shell textured polish. Gives a beautiful, iridescent sea-shell look.', 4.6, 'gels')">
+          <img src="p6.jpeg" alt="Shell Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Shell Nail Polish', 499, 'p6.jpeg', 'Shimmering natural shell textured polish. Gives a beautiful, iridescent sea-shell look.', 4.6, 'gels')">Shell Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.6</span></div>
+          <p>Shimmering shell effect for a glossy finish.</p>
+          <div class="price-row">
+            <span class="price">₹499</span>
+            <span class="original-price">₹699</span>
+            <span class="discount">28% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Shell Nail Polish', 499, 'p6.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Shell Nail Polish', 499, 'p6.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="product-card card-glass" data-category="tools" data-id="7">
+        <span class="card-badge">Essential</span>
+        <div class="img-wrapper" onclick="showProductDetails('UV Curing Lamp', 1299, 'p7.jpeg', 'Rapid UV/LED curing lamp with auto-sensor and timers. Evenly cures all gel types.', 4.9, 'tools')">
+          <img src="p7.jpeg" alt="UV Curing Lamp" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('UV Curing Lamp', 1299, 'p7.jpeg', 'Rapid UV/LED curing lamp with auto-sensor and timers. Evenly cures all gel types.', 4.9, 'tools')">UV Curing Lamp</h3>
+          <div class="stars">★★★★★ <span>4.9</span></div>
+          <p>Fast curing for gels and poly nails.</p>
+          <div class="price-row">
+            <span class="price">₹1299</span>
+            <span class="original-price">₹1899</span>
+            <span class="discount">31% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('UV Curing Lamp', 1299, 'p7.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('UV Curing Lamp', 1299, 'p7.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="product-card card-glass" data-category="tools" data-id="8">
+        <div class="img-wrapper" onclick="showProductDetails('Nail Art Brushes', 299, 'p8.jpeg', 'Set of 5 precision detail brushes. Perfect for fine lines, custom nail graphics, and dots.', 4.6, 'tools')">
+          <img src="p8.jpeg" alt="Nail Art Brushes" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Nail Art Brushes', 299, 'p8.jpeg', 'Set of 5 precision detail brushes. Perfect for fine lines, custom nail graphics, and dots.', 4.6, 'tools')">Nail Art Brushes</h3>
+          <div class="stars">★★★★☆ <span>4.6</span></div>
+          <p>Precision brushes for creative designs.</p>
+          <div class="price-row">
+            <span class="price">₹299</span>
+            <span class="original-price">₹499</span>
+            <span class="discount">40% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Nail Art Brushes', 299, 'p8.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Nail Art Brushes', 299, 'p8.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="product-card card-glass" data-category="tools" data-id="9">
+        <div class="img-wrapper" onclick="showProductDetails('Glitter Stickers', 199, 'p9.jpeg', 'Self-adhesive glitter holographic nail decals. Adds sparkling overlays in seconds.', 4.3, 'tools')">
+          <img src="p9.jpeg" alt="Glitter Stickers" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Glitter Stickers', 199, 'p9.jpeg', 'Self-adhesive glitter holographic nail decals. Adds sparkling overlays in seconds.', 4.3, 'tools')">Glitter Stickers</h3>
+          <div class="stars">★★★★☆ <span>4.3</span></div>
+          <p>Add sparkle to nails easily.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Glitter Stickers', 199, 'p9.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Glitter Stickers', 199, 'p9.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="product-card card-glass" data-category="tools" data-id="10">
+        <div class="img-wrapper" onclick="showProductDetails('3D Nail Charms', 299, 'P10.jpeg', 'Set of luxury gold and pearl 3D rhinestones and charms for highly artistic nail designs.', 4.7, 'tools')">
+          <img src="P10.jpeg" alt="3D Nail Charms" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('3D Nail Charms', 299, 'P10.jpeg', 'Set of luxury gold and pearl 3D rhinestones and charms for highly artistic nail designs.', 4.7, 'tools')">3D Nail Charms</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Dimensional charms for artistic nails.</p>
+          <div class="price-row">
+            <span class="price">₹299</span>
+            <span class="original-price">₹399</span>
+            <span class="discount">25% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('3D Nail Charms', 299, 'P10.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('3D Nail Charms', 299, 'P10.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 11 -->
+      <div class="product-card card-glass" data-category="gels" data-id="11">
+        <div class="img-wrapper" onclick="showProductDetails('Holographic Nail Polish', 399, 'p11.jpeg', 'Rainbow light-refracting linear holographic liquid polish. Requires no UV curing.', 4.8, 'gels')">
+          <img src="p11.jpeg" alt="Holographic Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Holographic Nail Polish', 399, 'p11.jpeg', 'Rainbow light-refracting linear holographic liquid polish. Requires no UV curing.', 4.8, 'gels')">Holographic Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.8</span></div>
+          <p>Rainbow shifting colors for nails.</p>
+          <div class="price-row">
+            <span class="price">₹399</span>
+            <span class="original-price">₹499</span>
+            <span class="discount">20% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Holographic Nail Polish', 399, 'p11.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Holographic Nail Polish', 399, 'p11.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 12 -->
+      <div class="product-card card-glass" data-category="gels" data-id="12">
+        <div class="img-wrapper" onclick="showProductDetails('Milky Manicure Polish', 299, 'p12.jpeg', 'Semi-sheer milky white nail lacquer. Clean aesthetic finish for minimalist manicures.', 4.7, 'gels')">
+          <img src="p12.jpeg" alt="Milky Manicure Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Milky Manicure Polish', 299, 'p12.jpeg', 'Semi-sheer milky white nail lacquer. Clean aesthetic finish for minimalist manicures.', 4.7, 'gels')">Milky Manicure Polish</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Soft white polish for subtle nails.</p>
+          <div class="price-row">
+            <span class="price">₹299</span>
+            <span class="original-price">₹399</span>
+            <span class="discount">25% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Milky Manicure Polish', 299, 'p12.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Milky Manicure Polish', 299, 'p12.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 13 -->
+      <div class="product-card card-glass" data-category="tools" data-id="13">
+        <div class="img-wrapper" onclick="showProductDetails('French Tip Stickers', 149, 'p13.jpeg', 'Flexible curved guidelines for tracing elegant clean French tips without errors.', 4.2, 'tools')">
+          <img src="p13.jpeg" alt="French Tip Stickers" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('French Tip Stickers', 149, 'p13.jpeg', 'Flexible curved guidelines for tracing elegant clean French tips without errors.', 4.2, 'tools')">French Tip Stickers</h3>
+          <div class="stars">★★★★☆ <span>4.2</span></div>
+          <p>Classic French tips made easy.</p>
+          <div class="price-row">
+            <span class="price">₹149</span>
+            <span class="original-price">₹199</span>
+            <span class="discount">25% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('French Tip Stickers', 149, 'p13.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('French Tip Stickers', 149, 'p13.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 14 -->
+      <div class="product-card card-glass" data-category="tools" data-id="14">
+        <div class="img-wrapper" onclick="showProductDetails('Customizable Nail Decals', 199, 'p14.jpeg', 'Water-transfer custom style nail decal transfers. Quick to apply under any top coat.', 4.4, 'tools')">
+          <img src="p14.jpeg" alt="Customizable Nail Decals" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Customizable Nail Decals', 199, 'p14.jpeg', 'Water-transfer custom style nail decal transfers. Quick to apply under any top coat.', 4.4, 'tools')">Customizable Nail Decals</h3>
+          <div class="stars">★★★★☆ <span>4.4</span></div>
+          <p>Create your unique nail style.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Customizable Nail Decals', 199, 'p14.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Customizable Nail Decals', 199, 'p14.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 15 -->
+      <div class="product-card card-glass" data-category="gels" data-id="15">
+        <div class="img-wrapper" onclick="showProductDetails('Soft Pastel Gel Polish', 399, 'p15.jpeg', 'Long-lasting soft pastel gel polish. Cures in 60s under LED light to a creamy high gloss.', 4.7, 'gels')">
+          <img src="p15.jpeg" alt="Soft Pastel Gel Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Soft Pastel Gel Polish', 399, 'p15.jpeg', 'Long-lasting soft pastel gel polish. Cures in 60s under LED light to a creamy high gloss.', 4.7, 'gels')">Soft Pastel Gel Polish</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Long-wear gentle pastel gels.</p>
+          <div class="price-row">
+            <span class="price">₹399</span>
+            <span class="original-price">₹549</span>
+            <span class="discount">27% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Soft Pastel Gel Polish', 399, 'p15.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Soft Pastel Gel Polish', 399, 'p15.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 16 -->
+      <div class="product-card card-glass" data-category="gels" data-id="16">
+        <div class="img-wrapper" onclick="showProductDetails('Bold Neon Nail Polish', 299, 'p16.jpeg', 'High pigment neon nail polish. Highly responsive under blacklight, smooth matte finish.', 4.5, 'gels')">
+          <img src="p16.jpeg" alt="Bold Neon Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Bold Neon Nail Polish', 299, 'p16.jpeg', 'High pigment neon nail polish. Highly responsive under blacklight, smooth matte finish.', 4.5, 'gels')">Bold Neon Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.5</span></div>
+          <p>Bright neon colors for fun nails.</p>
+          <div class="price-row">
+            <span class="price">₹299</span>
+            <span class="original-price">₹449</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Bold Neon Nail Polish', 299, 'p16.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Bold Neon Nail Polish', 299, 'p16.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 17 -->
+      <div class="product-card card-glass" data-category="gels" data-id="17">
+        <div class="img-wrapper" onclick="showProductDetails('Matte Rose Nail Polish', 199, 'p17.jpeg', 'Elegant dusty rose pink shade with a premium velvety non-reflective matte finish.', 4.6, 'gels')">
+          <img src="p17.jpeg" alt="Matte Rose Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Matte Rose Nail Polish', 199, 'p17.jpeg', 'Elegant dusty rose pink shade with a premium velvety non-reflective matte finish.', 4.6, 'gels')">Matte Rose Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.6</span></div>
+          <p>Velvet matte rose pink shade.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Matte Rose Nail Polish', 199, 'p17.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Matte Rose Nail Polish', 199, 'p17.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 18 -->
+      <div class="product-card card-glass" data-category="gels" data-id="18">
+        <div class="img-wrapper" onclick="showProductDetails('Pastel Lavender Nail Polish', 199, 'p18.jpeg', 'Delicate pastel purple shade. Non-streaking liquid formula with rapid dry times.', 4.5, 'gels')">
+          <img src="p18.jpeg" alt="Pastel Lavender Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Pastel Lavender Nail Polish', 199, 'p18.jpeg', 'Delicate pastel purple shade. Non-streaking liquid formula with rapid dry times.', 4.5, 'gels')">Pastel Lavender Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.5</span></div>
+          <p>Soft pastel lavender polish.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Pastel Lavender Nail Polish', 199, 'p18.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Pastel Lavender Nail Polish', 199, 'p18.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 19 -->
+      <div class="product-card card-glass" data-category="gels" data-id="19">
+        <div class="img-wrapper" onclick="showProductDetails('Chrome Mirror Nail Polish', 249, 'p19.jpeg', 'High reflective silver chrome metallic nail lacquer. Mirror-like shine without gel curing.', 4.8, 'gels')">
+          <img src="p19.jpeg" alt="Chrome Mirror Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Chrome Mirror Nail Polish', 249, 'p19.jpeg', 'High reflective silver chrome metallic nail lacquer. Mirror-like shine without gel curing.', 4.8, 'gels')">Chrome Mirror Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.8</span></div>
+          <p>Metallic mirror silver finish.</p>
+          <div class="price-row">
+            <span class="price">₹249</span>
+            <span class="original-price">₹349</span>
+            <span class="discount">28% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Chrome Mirror Nail Polish', 249, 'p19.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Chrome Mirror Nail Polish', 249, 'p19.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 20 -->
+      <div class="product-card card-glass" data-category="care" data-id="20">
+        <span class="card-badge">Best Treatment</span>
+        <div class="img-wrapper" onclick="showProductDetails('Overnight Repair Treatment', 399, 'p20.jpg', 'Overnight nail treatment oil rich in Keratin, Vitamin E, and organic Jojoba.', 4.9, 'care')">
+          <img src="p20.jpg" alt="Overnight Repair Treatment" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Overnight Repair Treatment', 399, 'p20.jpg', 'Overnight nail treatment oil rich in Keratin, Vitamin E, and organic Jojoba.', 4.9, 'care')">Overnight Repair Treatment</h3>
+          <div class="stars">★★★★★ <span>4.9</span></div>
+          <p>Softens and repairs nails overnight.</p>
+          <div class="price-row">
+            <span class="price">₹399</span>
+            <span class="original-price">₹599</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Overnight Repair Treatment', 399, 'p20.jpg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Overnight Repair Treatment', 399, 'p20.jpg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 21 -->
+      <div class="product-card card-glass" data-category="care" data-id="21">
+        <div class="img-wrapper" onclick="showProductDetails('Healthy Glow Duo', 499, 'p21.jpeg', 'Double action cuticle care oil and base nail strengthening glaze set.', 4.6, 'care')">
+          <img src="p21.jpeg" alt="Healthy Glow Duo" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Healthy Glow Duo', 499, 'p21.jpeg', 'Double action cuticle care oil and base nail strengthening glaze set.', 4.6, 'care')">Healthy Glow Duo</h3>
+          <div class="stars">★★★★☆ <span>4.6</span></div>
+          <p>Set for natural shine and strength.</p>
+          <div class="price-row">
+            <span class="price">₹499</span>
+            <span class="original-price">₹699</span>
+            <span class="discount">28% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Healthy Glow Duo', 499, 'p21.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Healthy Glow Duo', 499, 'p21.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 22 -->
+      <div class="product-card card-glass" data-category="nails" data-id="22">
+        <div class="img-wrapper" onclick="showProductDetails('Almond Nail Tips', 199, 'p22.jpeg', 'Pre-shaped almond full cover gel nail extension tips. 240pcs in 12 sizes.', 4.7, 'nails')">
+          <img src="p22.jpeg" alt="Almond Nail Tips" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Almond Nail Tips', 199, 'p22.jpeg', 'Pre-shaped almond full cover gel nail extension tips. 240pcs in 12 sizes.', 4.7, 'nails')">Almond Nail Tips</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Sleek almond-shaped extensions.</p>
+          <div class="price-row">
+            <span class="price">₹199</span>
+            <span class="original-price">₹299</span>
+            <span class="discount">33% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Almond Nail Tips', 199, 'p22.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Almond Nail Tips', 199, 'p22.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 23 -->
+      <div class="product-card card-glass" data-category="gels" data-id="23">
+        <div class="img-wrapper" onclick="showProductDetails('Red Ruby Gel Polish', 249, 'p23.jpeg', 'Classic royal red highly pigmented gel paint. Rich shine that does not chip or dull.', 4.8, 'gels')">
+          <img src="p23.jpeg" alt="Red Ruby Gel Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Red Ruby Gel Polish', 249, 'p23.jpeg', 'Classic royal red highly pigmented gel paint. Rich shine that does not chip or dull.', 4.8, 'gels')">Red Ruby Gel Polish</h3>
+          <div class="stars">★★★★☆ <span>4.8</span></div>
+          <p>Deep glossy red for gel-style shine.</p>
+          <div class="price-row">
+            <span class="price">₹249</span>
+            <span class="original-price">₹349</span>
+            <span class="discount">28% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Red Ruby Gel Polish', 249, 'p23.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Red Ruby Gel Polish', 249, 'p23.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 24 -->
+      <div class="product-card card-glass" data-category="gels" data-id="24">
+        <div class="img-wrapper" onclick="showProductDetails('Pearlized Shell Nail Polish', 200, 'p24.jpeg', 'Soft white pearl reflections. Enhances the natural glow of clean nails.', 4.5, 'gels')">
+          <img src="p24.jpeg" alt="Pearlized Shell Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Pearlized Shell Nail Polish', 200, 'p24.jpeg', 'Soft white pearl reflections. Enhances the natural glow of clean nails.', 4.5, 'gels')">Pearlized Shell Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.5</span></div>
+          <p>Soft pearl finish for nails.</p>
+          <div class="price-row">
+            <span class="price">₹200</span>
+            <span class="original-price">₹290</span>
+            <span class="discount">31% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Pearlized Shell Nail Polish', 200, 'p24.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Pearlized Shell Nail Polish', 200, 'p24.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 25 -->
+      <div class="product-card card-glass" data-category="gels" data-id="25">
+        <div class="img-wrapper" onclick="showProductDetails('Iridescent Shell Nail Polish', 249, 'p25.jpeg', 'Chameleon shade-shifting shimmer nail color. Changes color between pink, purple, and green.', 4.7, 'gels')">
+          <img src="p25.jpeg" alt="Iridescent Shell Nail Polish" />
+        </div>
+        <div class="info-wrapper">
+          <h3 onclick="showProductDetails('Iridescent Shell Nail Polish', 249, 'p25.jpeg', 'Chameleon shade-shifting shimmer nail color. Changes color between pink, purple, and green.', 4.7, 'gels')">Iridescent Shell Nail Polish</h3>
+          <div class="stars">★★★★☆ <span>4.7</span></div>
+          <p>Color-shifting nail polish.</p>
+          <div class="price-row">
+            <span class="price">₹249</span>
+            <span class="original-price">₹349</span>
+            <span class="discount">28% OFF</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="addToCart('Iridescent Shell Nail Polish', 249, 'p25.jpeg', event)">Add Cart</button>
+            <button class="btn btn-primary" onclick="buyNow('Iridescent Shell Nail Polish', 249, 'p25.jpeg')">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Floating Shopping Cart Button (Desktop only, replaced by bottom bar on mobile) -->
+    <div id="floatingCartBtn" onclick="toggleSidebar()">
+      <span id="cartCount">0</span>
+      🛒
+    </div>
+
+    <!-- Sidebar Cart Drawer -->
+    <section id="sidebarCart" class="sidebar-cart card-glass">
+      <div class="sidebar-header">
+        <h2>Your Cart 🛍️</h2>
+        <button class="close-sidebar" onclick="toggleSidebar()">✖</button>
+      </div>
+      <div id="cart-items">
+        <div class="empty-cart-msg">Your cart is empty 🌸</div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="total" id="cart-total">Total: ₹0</div>
+        <button class="btn btn-primary checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      </div>
+    </section>
+
+    <!-- Profile Sidebar Drawer -->
+    <section id="sidebarProfile" class="sidebar-cart card-glass">
+      <div class="sidebar-header">
+        <h2>Profile</h2>
+        <div class="profile-header-actions">
+          <a href="admin.html" id="adminBtn" class="profile-header-btn" title="Admin Dashboard" style="display:none;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></a>
+          <button id="logoutBtn" class="profile-header-btn" title="Logout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+          <button class="close-sidebar" onclick="toggleProfileSidebar()">✖</button>
+        </div>
+      </div>
+      <div class="profile-sidebar-body">
+        <div class="profile-sidebar-avatar"><span id="profileSidebarInitial">U</span></div>
+        <p class="profile-edit-hint">Manage your account details</p>
+
+        <div class="profile-field">
+          <label for="pfName">Full Name</label>
+          <input type="text" id="pfName" placeholder="Enter your full name" />
+        </div>
+        <div class="profile-field">
+          <label for="pfEmail">Email</label>
+          <input type="email" id="pfEmail" readonly />
+        </div>
+        <div class="profile-field">
+          <label for="pfPhone">Mobile Number</label>
+          <input type="tel" id="pfPhone" placeholder="10-digit mobile number" maxlength="10" />
+        </div>
+        <div class="profile-field">
+          <label for="pfAddress">Address</label>
+          <textarea id="pfAddress" rows="2" placeholder="House no, street, area"></textarea>
+        </div>
+        <div class="profile-row">
+          <div class="profile-field">
+            <label for="pfCity">City</label>
+            <input type="text" id="pfCity" placeholder="City" />
+          </div>
+          <div class="profile-field">
+            <label for="pfState">State</label>
+            <input type="text" id="pfState" placeholder="State" />
+          </div>
+        </div>
+        <div class="profile-field">
+          <label for="pfPincode">PIN Code</label>
+          <input type="text" id="pfPincode" placeholder="6-digit PIN code" maxlength="6" />
+        </div>
+
+        <button class="btn btn-primary profile-save-btn" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </section>
+
+    <!-- Search Overlay Page -->
+    <section id="searchOverlay" class="search-overlay">
+      <div class="search-overlay-header">
+        <button class="search-back-btn" onclick="closeSearchOverlay()" title="Back">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+        <div class="search-input-wrap">
+          <input type="text" id="searchOverlayInput" placeholder="Search products..." autocomplete="off" />
+          <button class="search-clear-overlay" id="searchOverlayClear" onclick="clearSearchOverlayInput()" title="Clear">✖</button>
+        </div>
+      </div>
+      <div class="search-overlay-body">
+        <div id="recentSearchesSection">
+          <div class="search-section-head">
+            <span>Recent Searches</span>
+            <button id="clearRecentBtn" onclick="clearRecentSearches()">Clear All</button>
+          </div>
+          <div id="recentSearchChips" class="recent-chips"></div>
+        </div>
+
+        <div id="popularSection">
+          <div class="search-section-head"><span>Most Bought</span></div>
+          <div id="popularGrid" class="popular-grid"></div>
+        </div>
+
+        <div id="searchResultsSection" class="search-results" style="display:none;">
+          <div class="search-section-head"><span id="searchResultsTitle">Results</span></div>
+          <div id="searchResultsList"></div>
+        </div>
+        <div id="searchNoResults" class="search-no-results" style="display:none;">
+          No products found for "<span id="searchNoResultsQuery"></span>"
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sticky Bottom Navigation (Mobile Viewports Only) -->
+  <div class="mobile-nav-bar">
+    <div class="mobile-nav-item active" onclick="scrollToTop()">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="mobile-nav-item" onclick="openSearchOverlay()">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+    </div>
+    <div class="mobile-nav-item" onclick="toggleSidebar()">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Cart</span>
+    </div>
+    <div class="mobile-nav-item" onclick="toggleProfileSidebar()">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </div>
+  </div>
+
+  <!-- Product Details Dialog (Native Modal) -->
+  <dialog id="productDetailDialog">
+    <div class="modal-card card-glass">
+      <button class="close-modal-btn" onclick="closeProductDetail()">&times;</button>
+      <div class="modal-body">
+        <div class="modal-img-container">
+          <img id="modalProductImg" src="" alt="Product Image" />
+        </div>
+        <div class="modal-info">
+          <span class="modal-badge" id="modalProductBadge">Best Seller</span>
+          <h3 id="modalProductTitle">Product Title</h3>
+          <div class="modal-rating">⭐ <span id="modalProductRating">4.8</span> (Customer Reviews)</div>
+          <p class="modal-price" id="modalProductPrice">₹399</p>
+          <p class="modal-desc" id="modalProductDesc">Product detailed description...</p>
+          
+          <div class="option-picker">
+            <span class="option-label">Select Color / Shade:</span>
+            <div class="swatches">
+              <span class="swatch active" style="background: #ff69b4;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #ffb6c1;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #e91e63;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #7b1fa2;" onclick="selectSwatch(this)"></span>
+            </div>
+          </div>
+          
+          <div class="option-picker">
+            <span class="option-label">Quantity:</span>
+            <div class="qty-selector">
+              <button class="qty-control-btn" onclick="adjustModalQty(-1)">-</button>
+              <span id="modalProductQty">1</span>
+              <button class="qty-control-btn" onclick="adjustModalQty(1)">+</button>
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="btn btn-secondary" id="modalAddToCartBtn">Add to Cart</button>
+            <button class="btn btn-primary" id="modalBuyNowBtn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKuFqq1jYeUon9DgqMnaq6vg1tYDdTnPo",
+      authDomain: "website-9a715.firebaseapp.com",
+      projectId: "website-9a715",
+      storageBucket: "website-9a715.firebasestorage.app",
+      messagingSenderId: "1006565436423",
+      appId: "1:1006565436423:web:a97c2176e5ead19a350ea2",
+      measurementId: "G-TC1052C9MT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    function profileInitial(name, email) {
+      const first = (name || "").trim().charAt(0);
+      return (first || (email || "U").charAt(0)).toUpperCase();
+    }
+
+    function applyInitials(name, email) {
+      const letter = profileInitial(name, email);
+      document.getElementById("profileInitial").textContent = letter;
+      document.getElementById("profileSidebarInitial").textContent = letter;
+    }
+
+    // Track User State
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      currentUser = user;
+      // Record the active user's UID so the cart/profile scripts can scope their storage per user
+      try { sessionStorage.setItem("currentUid", user.uid); } catch (e) {}
+      if (typeof window.reloadCartForUser === "function") window.reloadCartForUser();
+      const ADMIN_EMAIL = "admin@gmail.com";
+      if (user.email === ADMIN_EMAIL) {
+        document.getElementById("adminBtn").style.display = "flex";
+      }
+      await loadUserProfile(user);
+    });
+
+    async function loadUserProfile(user) {
+      const email = user.email || "";
+      document.getElementById("pfEmail").value = email;
+
+      let profile = null;
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) profile = snap.data();
+      } catch (e) {
+        console.error("Firestore profile read error:", e);
+      }
+      if (!profile) {
+        const localKey = "userProfile_" + user.uid;
+        const local = localStorage.getItem(localKey);
+        if (local) {
+          try { profile = JSON.parse(local); } catch (e) { profile = null; }
+        }
+      }
+
+      profile = profile || {};
+      const name = profile.fullName || "";
+      document.getElementById("pfName").value = name;
+      document.getElementById("pfPhone").value = profile.phone || "";
+      document.getElementById("pfAddress").value = profile.address || "";
+      document.getElementById("pfCity").value = profile.city || "";
+      document.getElementById("pfState").value = profile.state || "";
+      document.getElementById("pfPincode").value = profile.pincode || "";
+      applyInitials(name, email);
+    }
+
+    window.saveProfile = async function () {
+      if (!currentUser) return;
+
+      const name = document.getElementById("pfName").value.trim();
+      const phone = document.getElementById("pfPhone").value.trim();
+      const address = document.getElementById("pfAddress").value.trim();
+      const city = document.getElementById("pfCity").value.trim();
+      const state = document.getElementById("pfState").value.trim();
+      const pincode = document.getElementById("pfPincode").value.trim();
+
+      if (!name) { showToast("⚠️ Please enter your name."); return; }
+      if (phone && !/^[0-9]{10}$/.test(phone)) { showToast("⚠️ Phone number must be exactly 10 digits."); return; }
+      if (pincode && !/^[0-9]{6}$/.test(pincode)) { showToast("⚠️ PIN code must be exactly 6 digits."); return; }
+
+      const profile = {
+        fullName: name,
+        email: currentUser.email,
+        phone,
+        address,
+        city,
+        state,
+        pincode,
+        updatedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem("userProfile_" + currentUser.uid, JSON.stringify(profile));
+
+      try {
+        await setDoc(doc(db, "users", currentUser.uid), profile);
+        showToast("✅ Profile saved successfully!");
+      } catch (error) {
+        console.error("Firestore profile save error:", error);
+        showToast("⚠️ Profile saved on this device (cloud sync failed).");
+      }
+      applyInitials(name, currentUser.email);
+    };
+
+    // Logout
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "index.html";
+      } catch (error) {
+        alert("Error logging out, please try again.");
+      }
+    });
+  </script>
+
+  <!-- Core Page Logic -->
+  <script>
+    // State
+    function currentCartKey() {
+      let uid = "guest";
+      try { uid = sessionStorage.getItem("currentUid") || "guest"; } catch (e) {}
+      return "cartItems_" + uid;
+    }
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem(currentCartKey()) || '[]'); } catch (e) { cart = []; }
+    let activeModalQty = 1;
+    let selectedProductDetails = null;
+
+    // Dom Elements
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const searchBtn = document.getElementById('searchBtn');
+    const productDetailDialog = document.getElementById('productDetailDialog');
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartDisplay();
+      initCarousel();
+      
+      // Theme Initializer
+      const activeTheme = localStorage.getItem('theme') || 'light';
+      if (activeTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+      }
+      
+      // Theme Toggle Event
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+
+      // Clear search
+      searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchClearBtn.classList.remove('visible');
+        filterProducts();
+        searchInput.focus();
+      });
+
+      searchInput.addEventListener('input', () => {
+        searchClearBtn.classList.toggle('visible', searchInput.value.length > 0);
+        filterProducts();
+      });
+
+      searchBtn.addEventListener('click', () => {
+        openSearchOverlay();
+      });
+
+      // Categories tab clicks
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterProducts();
+        });
+      });
+
+      // Background bubble speeds
+      const bubbles = document.querySelectorAll('.bubble');
+      bubbles.forEach(b => {
+        b.style.left = `${Math.random() * 92}%`;
+        b.style.animationDelay = `${Math.random() * 12}s`;
+        b.style.animationDuration = `${18 + Math.random() * 10}s`;
+      });
+    });
+
+    // ===== Advertisement Carousel =====
+    let carouselIndex = 0;
+    let carouselTimer = null;
+
+    function initCarousel() {
+      const slides = document.querySelectorAll('#heroCarousel .carousel-slide');
+      const dotsContainer = document.getElementById('carouselDots');
+      if (!slides.length) return;
+
+      // build indicator dots
+      dotsContainer.innerHTML = '';
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      });
+
+      startCarouselTimer();
+    }
+
+    function goToSlide(index) {
+      const slides = document.querySelectorAll('#heroCarousel .carousel-slide');
+      const dots = document.querySelectorAll('#carouselDots .carousel-dot');
+      if (!slides.length) return;
+      carouselIndex = (index + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === carouselIndex));
+      dots.forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
+      startCarouselTimer();
+    }
+
+    function slideCarousel(dir) {
+      const slides = document.querySelectorAll('#heroCarousel .carousel-slide');
+      goToSlide(carouselIndex + dir);
+    }
+
+    function startCarouselTimer() {
+      if (carouselTimer) clearInterval(carouselTimer);
+      carouselTimer = setInterval(() => {
+        goToSlide(carouselIndex + 1);
+      }, 4000);
+    }
+
+    // Cart Management
+    function saveCart() {
+      localStorage.setItem(currentCartKey(), JSON.stringify(cart));
+    }
+
+    // Reload cart from storage for the currently signed-in user (called after auth resolves)
+    window.reloadCartForUser = function () {
+      try { cart = JSON.parse(localStorage.getItem(currentCartKey()) || '[]'); } catch (e) { cart = []; }
+      updateCartDisplay();
+    };
+
+    function addToCart(name, price, image, event, qtyToAdd = 1) {
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += qtyToAdd;
+      } else {
+        cart.push({ name, price, qty: qtyToAdd, image });
+      }
+      
+      updateCartDisplay();
+      saveCart();
+
+      // Trigger fly animation
+      if (event && event.target) {
+        const card = event.target.closest('.product-card');
+        if (card) {
+          const img = card.querySelector('img');
+          flyToCart(img);
+        }
+      }
+
+      showToast(`💅 Added ${qtyToAdd}x ${name} to cart!`);
+    }
+
+    function updateCartDisplay() {
+      const itemsContainer = document.getElementById('cart-items');
+      const totalContainer = document.getElementById('cart-total');
+      const cartCountContainers = [
+        document.getElementById('cartCount'),
+        document.querySelector('.mobile-nav-item:nth-child(3) span')
+      ];
+
+      itemsContainer.innerHTML = '';
+      let total = 0;
+      let totalItems = 0;
+
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty 🌸</div>';
+      } else {
+        cart.forEach((item, index) => {
+          total += item.price * item.qty;
+          totalItems += item.qty;
+
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" />
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">₹${item.price}</div>
+              <div class="cart-item-qty-control">
+                <button class="qty-btn" onclick="modifyCartQty(${index}, -1)">-</button>
+                <span>${item.qty}</span>
+                <button class="qty-btn" onclick="modifyCartQty(${index}, 1)">+</button>
+              </div>
+            </div>
+            <button class="close-sidebar" style="font-size: 1.1rem;" onclick="removeCartItem(${index})">✖</button>
+          `;
+          itemsContainer.appendChild(div);
+        });
+      }
+
+      totalContainer.textContent = `Total: ₹${total}`;
+      
+      // Update count badge
+      const badge = document.getElementById('cartCount');
+      if (badge) {
+        badge.textContent = totalItems;
+        badge.style.display = totalItems > 0 ? 'flex' : 'none';
+      }
+    }
+
+    function modifyCartQty(index, change) {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      updateCartDisplay();
+      saveCart();
+    }
+
+    function removeCartItem(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+      saveCart();
+    }
+
+    function updateBodyLock() {
+      const cartOpen = document.getElementById('sidebarCart').classList.contains('active');
+      const profileOpen = document.getElementById('sidebarProfile').classList.contains('active');
+      const searchOpen = document.getElementById('searchOverlay').classList.contains('open');
+      document.body.classList.toggle('drawer-open', cartOpen || profileOpen || searchOpen);
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebarCart');
+      sidebar.classList.toggle('active');
+      updateBodyLock();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        showToast("⚠️ Your shopping cart is empty!");
+        return;
+      }
+      saveCart();
+      window.location.href = "payment.html?cart=true";
+    }
+
+    function buyNow(name, price, image) {
+      const fullImagePath = new URL(image, window.location.href).href;
+      const params = new URLSearchParams({
+        product: name,
+        price: price,
+        image: fullImagePath
+      });
+      window.location.href = `payment.html?${params.toString()}`;
+    }
+
+    // Dynamic Filter Products
+    function filterProducts() {
+      const query = searchInput.value.toLowerCase().trim();
+      const activeTab = document.querySelector('.tab-btn.active');
+      const targetCategory = activeTab ? activeTab.getAttribute('data-category') : 'all';
+      const cards = document.querySelectorAll('.product-card');
+
+      cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+        const category = card.getAttribute('data-category');
+
+        const matchQuery = title.includes(query) || desc.includes(query);
+        const matchCategory = targetCategory === 'all' || category === targetCategory;
+
+        if (matchQuery && matchCategory) {
+          card.style.display = 'flex';
+          card.style.animation = 'modalScaleUp 0.3s ease-out';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Modal Product Details
+    function showProductDetails(name, price, image, desc, rating, category) {
+      selectedProductDetails = { name, price, image, desc, rating, category };
+      activeModalQty = 1;
+      
+      document.getElementById('modalProductImg').src = image;
+      document.getElementById('modalProductTitle').textContent = name;
+      document.getElementById('modalProductRating').textContent = rating;
+      document.getElementById('modalProductPrice').textContent = `₹${price}`;
+      document.getElementById('modalProductDesc').textContent = desc;
+      document.getElementById('modalProductQty').textContent = activeModalQty;
+
+      const badge = document.getElementById('modalProductBadge');
+      if (rating >= 4.8) {
+        badge.textContent = "Best Seller 🔥";
+        badge.style.background = "var(--secondary)";
+      } else {
+        badge.textContent = "Highly Rated 🌸";
+        badge.style.background = "var(--primary)";
+      }
+
+      // Configure Modal button actions
+      document.getElementById('modalAddToCartBtn').onclick = (e) => {
+        addToCart(name, price, image, null, activeModalQty);
+        closeProductDetail();
+      };
+
+      document.getElementById('modalBuyNowBtn').onclick = () => {
+        // Buy Now with quantity requires updating params or handles
+        const fullImagePath = new URL(image, window.location.href).href;
+        const params = new URLSearchParams({
+          product: name,
+          price: price * activeModalQty, // calculated price
+          qty: activeModalQty,
+          image: fullImagePath
+        });
+        window.location.href = `payment.html?${params.toString()}`;
+      };
+
+      productDetailDialog.showModal();
+      productDetailDialog.classList.add('show-anim');
+    }
+
+    function closeProductDetail() {
+      productDetailDialog.close();
+      productDetailDialog.classList.remove('show-anim');
+    }
+
+    function adjustModalQty(change) {
+      activeModalQty += change;
+      if (activeModalQty < 1) activeModalQty = 1;
+      document.getElementById('modalProductQty').textContent = activeModalQty;
+    }
+
+    function selectSwatch(swatchEl) {
+      const swatches = swatchEl.parentElement.querySelectorAll('.swatch');
+      swatches.forEach(s => s.classList.remove('active'));
+      swatchEl.classList.add('active');
+    }
+
+    // Mobile specific layout control
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function focusSearch() {
+      window.scrollTo({ top: searchInput.offsetTop - 120, behavior: 'smooth' });
+      setTimeout(() => searchInput.focus(), 300);
+    }
+    function toggleProfileSidebar() {
+      document.getElementById('sidebarProfile').classList.toggle('active');
+      updateBodyLock();
+    }
+
+    // ==================== Search Overlay Page ====================
+    const searchOverlay = document.getElementById('searchOverlay');
+    const searchOverlayInput = document.getElementById('searchOverlayInput');
+    const searchOverlayClear = document.getElementById('searchOverlayClear');
+
+    function getRecentSearches() {
+      try { return JSON.parse(localStorage.getItem('recentSearches') || '[]'); } catch (e) { return []; }
+    }
+    function saveRecentSearches(list) {
+      localStorage.setItem('recentSearches', JSON.stringify(list.slice(0, 8)));
+    }
+    function addRecentSearch(q) {
+      if (!q) return;
+      const list = getRecentSearches().filter(s => s.toLowerCase() !== q.toLowerCase());
+      list.unshift(q);
+      saveRecentSearches(list);
+    }
+    function removeRecentSearch(q) {
+      saveRecentSearches(getRecentSearches().filter(s => s.toLowerCase() !== q.toLowerCase()));
+      renderRecentSearches();
+    }
+    function clearRecentSearches() {
+      saveRecentSearches([]);
+      renderRecentSearches();
+    }
+    function renderRecentSearches() {
+      const list = getRecentSearches();
+      const section = document.getElementById('recentSearchesSection');
+      const chips = document.getElementById('recentSearchChips');
+      section.style.display = list.length ? 'block' : 'none';
+      chips.innerHTML = '';
+      list.forEach(q => {
+        const chip = document.createElement('span');
+        chip.className = 'recent-chip';
+        const icon = document.createElement('span');
+        icon.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+        const text = document.createElement('span');
+        text.textContent = q;
+        const close = document.createElement('span');
+        close.className = 'recent-chip-close';
+        close.textContent = '✖';
+        close.onclick = (e) => { e.stopPropagation(); removeRecentSearch(q); };
+        chip.onclick = () => applySearchToHome(q);
+        chip.append(icon, text, close);
+        chips.appendChild(chip);
+      });
+    }
+
+    function parseShowDetails(onclickStr) {
+      const re = /'([^']*)'|(-?\d+(?:\.\d+)?)/g;
+      const parts = [];
+      let m;
+      while ((m = re.exec(onclickStr)) !== null) {
+        parts.push(m[1] !== undefined ? m[1] : Number(m[2]));
+      }
+      return { name: parts[0], price: parts[1], image: parts[2], desc: parts[3], rating: parts[4], category: parts[5] };
+    }
+
+    function renderPopularProducts() {
+      const grid = document.getElementById('popularGrid');
+      grid.innerHTML = '';
+      const popular = [];
+      document.querySelectorAll('.product-card').forEach(card => {
+        const wrap = card.querySelector('.img-wrapper');
+        const data = wrap ? parseShowDetails(wrap.getAttribute('onclick') || '') : null;
+        const imgEl = card.querySelector('img');
+        if (data && data.name && Number(data.rating) >= 4.8 && imgEl) {
+          popular.push({ ...data, image: imgEl.src });
+        }
+      });
+      popular.slice(0, 6).forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'popular-item';
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.name;
+        img.loading = 'lazy';
+        const info = document.createElement('div');
+        info.className = 'popular-item-info';
+        const h = document.createElement('h4');
+        h.textContent = item.name;
+        const p = document.createElement('div');
+        p.className = 'popular-price';
+        p.textContent = `₹${item.price}`;
+        info.append(h, p);
+        div.append(img, info);
+        div.onclick = () => {
+          closeSearchOverlay();
+          showProductDetails(item.name, item.price, item.image, item.desc, item.rating, item.category);
+        };
+        grid.appendChild(div);
+      });
+    }
+
+    function renderSearchResults(q) {
+      const resultsSection = document.getElementById('searchResultsSection');
+      const resultsList = document.getElementById('searchResultsList');
+      const noResults = document.getElementById('searchNoResults');
+      const recentSection = document.getElementById('recentSearchesSection');
+      const popularSection = document.getElementById('popularSection');
+
+      if (!q) {
+        resultsSection.style.display = 'none';
+        noResults.style.display = 'none';
+        recentSection.style.display = getRecentSearches().length ? 'block' : 'none';
+        popularSection.style.display = 'block';
+        return;
+      }
+
+      recentSection.style.display = 'none';
+      popularSection.style.display = 'none';
+
+      const query = q.toLowerCase();
+      const matches = [];
+      document.querySelectorAll('.product-card').forEach(card => {
+        const title = card.querySelector('h3') ? card.querySelector('h3').textContent.toLowerCase() : '';
+        const desc = card.querySelector('p') ? card.querySelector('p').textContent.toLowerCase() : '';
+        if (title.includes(query) || desc.includes(query)) {
+          const wrap = card.querySelector('.img-wrapper');
+          const data = wrap ? parseShowDetails(wrap.getAttribute('onclick') || '') : null;
+          const imgEl = card.querySelector('img');
+          if (data && data.name && imgEl) matches.push({ ...data, image: imgEl.src });
+        }
+      });
+
+      if (matches.length === 0) {
+        resultsSection.style.display = 'none';
+        noResults.style.display = 'block';
+        document.getElementById('searchNoResultsQuery').textContent = q;
+        return;
+      }
+
+      noResults.style.display = 'none';
+      resultsSection.style.display = 'block';
+      document.getElementById('searchResultsTitle').textContent = `Results (${matches.length})`;
+      resultsList.innerHTML = '';
+      matches.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'search-result-row';
+        const icon = document.createElement('span');
+        icon.className = 'result-icon';
+        icon.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+        const name = document.createElement('span');
+        name.className = 'result-name';
+        name.textContent = item.name;
+        const arrow = document.createElement('span');
+        arrow.className = 'result-arrow';
+        arrow.textContent = '›';
+        row.append(icon, name, arrow);
+        row.onclick = () => {
+          addRecentSearch(item.name);
+          closeSearchOverlay();
+          showProductDetails(item.name, item.price, item.image, item.desc, item.rating, item.category);
+        };
+        resultsList.appendChild(row);
+      });
+    }
+
+    function applySearchToHome(q) {
+      if (!q) return;
+      addRecentSearch(q);
+      searchInput.value = q;
+      searchClearBtn.classList.toggle('visible', true);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const allBtn = document.querySelector('.tab-btn[data-category="all"]');
+      if (allBtn) allBtn.classList.add('active');
+      filterProducts();
+      closeSearchOverlay();
+      document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function clearSearchOverlayInput() {
+      searchOverlayInput.value = '';
+      searchOverlayClear.style.display = 'none';
+      renderSearchResults('');
+      searchOverlayInput.focus();
+    }
+
+    function openSearchOverlay() {
+      searchOverlay.classList.add('open');
+      searchOverlayInput.value = '';
+      searchOverlayClear.style.display = 'none';
+      updateBodyLock();
+      renderRecentSearches();
+      renderPopularProducts();
+      renderSearchResults('');
+      focusOverlayInput();
+    }
+
+    function focusOverlayInput() {
+      try {
+        searchOverlayInput.focus({ preventScroll: true });
+      } catch (e) {
+        searchOverlayInput.focus();
+      }
+      requestAnimationFrame(() => {
+        try {
+          searchOverlayInput.focus({ preventScroll: true });
+        } catch (e) {
+          searchOverlayInput.focus();
+        }
+      });
+    }
+
+    function closeSearchOverlay() {
+      searchOverlay.classList.remove('open');
+      updateBodyLock();
+    }
+
+    document.querySelector('.search-input-wrap').addEventListener('touchstart', (e) => {
+      if (e.target && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        focusOverlayInput();
+      }
+    });
+
+    searchOverlayInput.addEventListener('input', () => {
+      const q = searchOverlayInput.value.trim();
+      searchOverlayClear.style.display = q ? 'flex' : 'none';
+      renderSearchResults(q);
+    });
+    searchOverlayInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const q = searchOverlayInput.value.trim();
+        if (q) applySearchToHome(q);
+      }
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && searchInput.value.trim()) {
+        addRecentSearch(searchInput.value.trim());
+      }
+    });
+
+    // Animations helpers
+    function flyToCart(imgElement) {
+      const cartBtn = document.getElementById('floatingCartBtn');
+      const mobileCartTab = document.querySelector('.mobile-nav-item:nth-child(3)');
+      const targetElement = window.innerWidth > 768 ? cartBtn : mobileCartTab;
+      if (!targetElement) return;
+
+      const clone = imgElement.cloneNode(true);
+      const rect = imgElement.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+
+      clone.classList.add('fly-item');
+      clone.style.top = rect.top + 'px';
+      clone.style.left = rect.left + 'px';
+      clone.style.width = rect.width + 'px';
+      clone.style.height = rect.height + 'px';
+      
+      document.body.appendChild(clone);
+
+      setTimeout(() => {
+        clone.style.top = (targetRect.top + targetRect.height / 2 - 10) + 'px';
+        clone.style.left = (targetRect.left + targetRect.width / 2 - 10) + 'px';
+        clone.style.width = '20px';
+        clone.style.height = '20px';
+        clone.style.opacity = '0.2';
+      }, 30);
+
+      setTimeout(() => {
+        clone.remove();
+        targetElement.style.transform = 'scale(1.25)';
+        setTimeout(() => targetElement.style.transform = 'scale(1)', 150);
+      }, 800);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
