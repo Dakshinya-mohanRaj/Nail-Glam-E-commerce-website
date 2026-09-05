@@ -8,18 +8,121 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
+      margin: 0;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       overflow: hidden;
+      padding: 24px;
     }
 
-    .container {
-      width: 90%;
-      max-width: 420px;
+    /* ===== Page background decor ===== */
+    .auth-decor {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .auth-decor .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      animation: blobFloat 16s ease-in-out infinite alternate;
+    }
+    .auth-decor .b1 { width: 340px; height: 340px; background: var(--primary); top: -80px; left: -60px; }
+    .auth-decor .b2 { width: 420px; height: 420px; background: var(--secondary); bottom: -120px; right: -80px; animation-delay: -4s; }
+    .auth-decor .b3 { width: 260px; height: 260px; background: var(--accent); top: 40%; left: 70%; animation-delay: -8s; }
+    @keyframes blobFloat {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, -30px) scale(1.15); }
+    }
+
+    /* Floating bubbles (from original) */
+    #bubbleContainer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; }
+
+    /* ===== Main card ===== */
+    .auth-card {
+      width: 100%;
+      max-width: 920px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-radius: 24px;
       overflow: hidden;
+      background: var(--bg-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
       position: relative;
+    }
+
+    /* ===== Left branding panel ===== */
+    .auth-brand {
+      background: linear-gradient(160deg, var(--primary), var(--accent));
+      color: #fff;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-brand::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      bottom: -120px;
+      right: -80px;
+    }
+    .auth-brand .brand-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      object-fit: cover;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      border: 2px solid rgba(255,255,255,0.4);
+      margin-bottom: 28px;
+    }
+    .auth-brand h1 {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 2.2rem;
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
+    .auth-brand p {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      opacity: 0.92;
+      line-height: 1.6;
+      max-width: 260px;
+    }
+    .auth-brand .brand-quote {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 1.05rem;
+      opacity: 0.85;
+      margin-top: 32px;
+    }
+    .auth-brand .brand-footer {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      opacity: 0.7;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-top: 24px;
+    }
+
+    /* ===== Right form panel ===== */
+    .auth-forms {
+      padding: 44px 44px 36px;
+      position: relative;
+      overflow: hidden;
     }
 
     .form-container {
@@ -28,33 +131,94 @@
       transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
-    form {
+    form.auth-form {
       flex: 1;
-      padding: 40px 30px;
+      width: 50%;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transform: translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
-
-    form.active {
+    form.auth-form.active {
       opacity: 1;
+      transform: translateY(0);
     }
 
-    h2 {
+    .auth-title {
+      font-family: var(--font-heading);
       color: var(--primary);
       text-align: center;
-      margin-bottom: 25px;
-      font-size: 1.8rem;
-      text-shadow: 0 2px 10px var(--primary-glow);
+      margin: 0 0 8px;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0 0 28px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    .field label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 7px;
+      font-size: 0.82rem;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap .field-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: var(--primary);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .input-wrap .form-control {
+      padding-left: 46px;
+      border-radius: 12px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      font-size: 0.95rem;
+      background: var(--bg-surface-solid);
+      border: 1.5px solid var(--border-color);
+    }
+    .input-wrap .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    .auth-submit {
+      margin-top: 8px;
+      padding: 15px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+    .auth-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px var(--primary-glow);
     }
 
     .error-msg {
-      color: #ff4d4d;
-      font-size: 0.85rem;
-      margin-top: 10px;
+      color: #e05555;
+      font-size: 0.82rem;
+      margin-top: 12px;
       text-align: center;
       font-weight: 500;
     }
@@ -68,6 +232,7 @@
       margin-top: 20px;
       text-align: center;
       font-family: var(--font-body);
+      font-size: 0.9rem;
       transition: color 0.3s;
     }
     .toggle-link:hover {
@@ -78,11 +243,30 @@
     .slide {
       transform: translateX(-50%);
     }
+
+    /* ===== Responsive ===== */
+    @media(max-width: 720px) {
+      .auth-card {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+      }
+      .auth-brand {
+        display: none;
+      }
+      .auth-forms {
+        padding: 36px 26px 28px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Floating Bubbles Background -->
+  <!-- Background Decor -->
+  <div class="auth-decor">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
   <div id="bubbleContainer">
     <div class="bubble small pink"></div>
     <div class="bubble medium purple"></div>
@@ -91,54 +275,85 @@
     <div class="bubble medium pink"></div>
   </div>
 
-  <div class="container card-glass">
-    <div class="form-container" id="formContainer">
-      
-      <!-- LOGIN FORM -->
-      <form id="loginForm" class="active">
-        <h2>Welcome Back 💖</h2>
-        
-        <div class="form-group">
-          <label for="loginEmail">Email Address</label>
-          <input type="email" id="loginEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="loginPassword">Password</label>
-          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password" required />
-        </div>
-        
-        <button type="button" id="loginBtn" class="btn btn-primary">Login 💅</button>
-        <p class="error-msg" id="loginError"></p>
-        
-        <button type="button" class="toggle-link" id="toSignup">Create an Account →</button>
-      </form>
+  <div class="auth-card">
+    <!-- Left Branding -->
+    <div class="auth-brand">
+      <div>
+        <img src="nglogo.png" alt="Nail Glam logo" class="brand-logo" />
+        <h1>Nail Glam</h1>
+        <p>Luxury, salon-quality nails — crafted for your hands, curated for your style.</p>
+        <div class="brand-quote">"Beauty that lasts, elegance that speaks."</div>
+      </div>
+      <div class="brand-footer">✦ Nail Glam • Premium Nail Care ✦</div>
+    </div>
 
-      <!-- SIGNUP FORM -->
-      <form id="signupForm">
-        <h2>Create Account 💅</h2>
-        
-        <div class="form-group">
-          <label for="signupName">Full Name</label>
-          <input type="text" id="signupName" class="form-control" placeholder="Jane Doe" autocomplete="name" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="signupEmail">Email Address</label>
-          <input type="email" id="signupEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="signupPassword">Password</label>
-          <input type="password" id="signupPassword" class="form-control" placeholder="••••••••" autocomplete="new-password" required />
-        </div>
-        
-        <button type="button" id="signupBtn" class="btn btn-primary">Sign Up 🌸</button>
-        <p class="error-msg" id="signupError"></p>
-        
-        <button type="button" class="toggle-link" id="toLogin">← Back to Login</button>
-      </form>
+    <!-- Right Forms -->
+    <div class="auth-forms">
+      <div class="form-container" id="formContainer">
 
+        <!-- LOGIN FORM -->
+        <form id="loginForm" class="auth-form active">
+          <h2 class="auth-title">Welcome Back 💖</h2>
+          <p class="auth-subtitle">Sign in to continue your glam journey</p>
+
+          <div class="field">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-wrap">
+              <span class="field-icon">✉️</span>
+              <input type="email" id="loginEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <div class="input-wrap">
+              <span class="field-icon">🔒</span>
+              <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+          </div>
+
+          <button type="button" id="loginBtn" class="btn btn-primary auth-submit">Login 💅</button>
+          <p class="error-msg" id="loginError"></p>
+
+          <button type="button" class="toggle-link" id="toSignup">Create an Account →</button>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form id="signupForm" class="auth-form">
+          <h2 class="auth-title">Create Account 💅</h2>
+          <p class="auth-subtitle">Join us and unlock luxurious nails</p>
+
+          <div class="field">
+            <label for="signupName">Full Name</label>
+            <div class="input-wrap">
+              <span class="field-icon">👤</span>
+              <input type="text" id="signupName" class="form-control" placeholder="Jane Doe" autocomplete="name" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="signupEmail">Email Address</label>
+            <div class="input-wrap">
+              <span class="field-icon">✉️</span>
+              <input type="email" id="signupEmail" class="form-control" placeholder="name@domain.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="signupPassword">Password</label>
+            <div class="input-wrap">
+              <span class="field-icon">🔒</span>
+              <input type="password" id="signupPassword" class="form-control" placeholder="••••••••" autocomplete="new-password" required />
+            </div>
+          </div>
+
+          <button type="button" id="signupBtn" class="btn btn-primary auth-submit">Sign Up 🌸</button>
+          <p class="error-msg" id="signupError"></p>
+
+          <button type="button" class="toggle-link" id="toLogin">← Back to Login</button>
+        </form>
+
+      </div>
     </div>
   </div>
 
