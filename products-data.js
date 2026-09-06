@@ -92,9 +92,9 @@ window.getProductByName = function (name) {
 
 window.getRelatedProducts = function (product, limit = 8) {
   if (!product) return [];
-  const sameCat = (window.NAIL_PRODUCTS || []).filter(p => p.id !== product.id && p.category === product.category);
-  const others = (window.NAIL_PRODUCTS || []).filter(p => p.id !== product.id && p.category !== product.category);
-  return sameCat.concat(others).slice(0, limit);
+  return (window.NAIL_PRODUCTS || [])
+    .filter(p => p.id !== product.id && p.category === product.category)
+    .slice(0, limit);
 };
 
 window.formatPrice = function (n) {
