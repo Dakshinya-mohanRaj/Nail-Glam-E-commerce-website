@@ -1084,7 +1084,13 @@ body.drawer-open {
     font-size: 0.68rem;
   }
   .product-card p {
-    display: none; /* Hide descriptions on card grid for cleaner look */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.7rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 4px !important;
   }
   .product-card .price-row {
     flex-direction: column;

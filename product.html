@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details | Nail Glam</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="products-data.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-app);
+      background-attachment: fixed;
+      color: var(--text-main);
+      margin: 0;
+      min-height: 100vh;
+      padding-bottom: calc(var(--mobile-nav-height) + 40px);
+    }
+    body.dark-theme { }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      height: 60px;
+      background: var(--bg-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-main); }
+    .nav-logo img { height: 40px; width: auto; }
+    .nav-logo span { font-family: var(--font-heading); font-size: 1.4rem; }
+    .nav-links { display: flex; align-items: center; gap: 14px; }
+    .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+
+    .container { max-width: 1150px; margin: 0 auto; padding: 24px 16px; }
+
+    /* Breadcrumb */
+    .breadcrumb { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* Main product card */
+    .product-main {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 30px;
+      background: var(--bg-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: var(--corner-radius);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+    }
+    .product-gallery {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: var(--corner-radius);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      aspect-ratio: 1/1;
+    }
+    .product-gallery img { width: 100%; height: 100%; object-fit: cover; }
+
+    .product-info h1 { font-family: var(--font-heading); font-size: 1.9rem; margin: 0 0 8px; }
+    .product-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; color: #fff;
+      background: var(--secondary);
+    }
+    .product-badge.rose { background: var(--primary); }
+    .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .rating-badge { background: #388e3c; color: #fff; padding: 3px 10px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; }
+    .star-show { color: #f5a623; letter-spacing: 1px; }
+    .rating-count { color: var(--text-muted); font-size: 0.85rem; }
+
+    .price-block { margin: 14px 0 18px; padding: 16px; background: rgba(245, 245, 245, 0.6); border-radius: var(--corner-radius); }
+    body.dark-theme .price-block { background: rgba(40, 32, 35, 0.6); }
+    .price-main { font-size: 1.8rem; font-weight: 800; }
+    .price-meta { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+    .tax-note { font-size: 0.78rem; color: #388e3c; margin-top: 6px; }
+
+    .product-desc { line-height: 1.6; color: var(--text-main); margin-bottom: 18px; }
+    .spec-list { list-style: none; padding: 0; margin: 0 0 20px; }
+    .spec-list li { padding: 8px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.92rem; display: flex; gap: 8px; }
+    .spec-list li b { min-width: 120px; color: var(--text-muted); font-weight: 600; }
+
+    .qty-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .qty-row .label { font-weight: 600; }
+    .qty-selector { display: flex; align-items: center; gap: 10px; }
+    .qty-control-btn {
+      width: 34px; height: 34px; border: 1px solid var(--border-color); background: transparent;
+      color: var(--text-main); border-radius: 8px; font-size: 1.2rem; cursor: pointer; line-height: 1;
+      transition: 0.2s;
+    }
+    .qty-control-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .qty-value { font-weight: 700; min-width: 24px; text-align: center; }
+
+    .action-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .action-row .btn { flex: 1; min-width: 150px; padding: 14px; font-size: 1rem; }
+
+    /* Reviews */
+    .reviews-section { margin-top: 34px; }
+    .reviews-section h2 { font-family: var(--font-heading); font-size: 1.5rem; margin: 0 0 18px; }
+    .review-card {
+      background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color); border-radius: var(--corner-radius);
+      padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
+    }
+    .review-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .review-user { display: flex; align-items: center; gap: 10px; }
+    .review-avatar {
+      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: var(--secondary); color: #fff; font-weight: 700; font-size: 0.9rem;
+    }
+    .review-name { font-weight: 600; font-size: 0.92rem; }
+    .review-date { color: var(--text-muted); font-size: 0.78rem; }
+    .review-stars { color: #f5a623; }
+    .review-text { font-size: 0.92rem; line-height: 1.5; color: var(--text-main); }
+
+    /* Related products */
+    .related-section { margin-top: 34px; }
+    .related-section h2 { font-family: var(--font-heading); font-size: 1.5rem; margin: 0 0 18px; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+    .related-card {
+      background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color); border-radius: var(--corner-radius);
+      overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: var(--text-main);
+      display: block;
+    }
+    .related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .related-card .rc-img { aspect-ratio: 1/1; overflow: hidden; }
+    .related-card .rc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .related-card .rc-body { padding: 10px 12px; }
+    .related-card .rc-name { font-weight: 600; font-size: 0.9rem; margin: 0 0 4px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .related-card .rc-meta { display: flex; align-items: center; justify-content: space-between; }
+    .related-card .rc-price { font-weight: 700; font-size: 0.95rem; }
+    .related-card .rc-star { color: #f5a623; font-size: 0.85rem; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: calc(var(--mobile-nav-height) + 16px); left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--text-main); color: var(--bg-surface-solid); padding: 14px 22px; border-radius: 12px;
+      box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 100; max-width: 90vw; text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Mobile bottom nav (reuse style.css classes) */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--text-main);
+      background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px;
+      padding: 8px 14px; font-size: 0.9rem; font-weight: 600; margin-bottom: 18px; transition: 0.2s;
+    }
+    .back-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    @media(max-width: 720px) {
+      .product-main { grid-template-columns: 1fr; padding: 16px; }
+      .product-gallery { max-width: 100%; }
+      .product-info h1 { font-size: 1.5rem; }
+      .price-main { font-size: 1.5rem; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 400px) {
+      .nav-logo span { display: none; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="nav-bar">
+    <a href="home.html" class="nav-logo">
+      <img src="nglogo.png" alt="Nail Glam logo" />
+      <span>Nail Glam</span>
+    </a>
+    <div class="nav-links">
+      <a href="home.html" id="cartBtn">Cart (<span id="cartCount">0</span>)</a>
+      <a href="#" id="themeToggleBtn" title="Toggle Theme">🌙</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Back -->
+    <a href="home.html" class="back-btn">← Back to Shop</a>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="home.html">Home</a>
+      <span>/</span>
+      <span id="crumbCategory">Category</span>
+      <span>/</span>
+      <span id="crumbName">Product</span>
+    </div>
+
+    <!-- Product Main -->
+    <section class="product-main" id="productMain">
+      <div class="product-gallery">
+        <img id="productImg" src="" alt="Product Image" />
+      </div>
+      <div class="product-info">
+        <span class="product-badge" id="productBadge">Best Seller</span>
+        <h1 id="productName">Product Name</h1>
+        <div class="rating-row">
+          <span class="rating-badge" id="ratingNum">4.8</span>
+          <span class="star-show" id="ratingStars">★★★★★</span>
+          <span class="rating-count" id="ratingCount">(120 verified buyer reviews)</span>
+        </div>
+        <div class="price-block">
+          <div class="price-main" id="productPrice">₹399</div>
+          <div class="price-meta" id="productCategory">Category</div>
+          <div class="tax-note">Inclusive of all taxes</div>
+        </div>
+        <p class="product-desc" id="productDesc">Product description...</p>
+        <ul class="spec-list" id="specList"></ul>
+
+        <div class="qty-row">
+          <span class="label">Quantity:</span>
+          <div class="qty-selector">
+            <button class="qty-control-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-value" id="qtyValue">1</span>
+            <button class="qty-control-btn" onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-secondary" id="addToCartBtn">Add to Cart</button>
+          <button class="btn btn-primary" id="buyNowBtn">Buy Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews-section">
+      <h2>Ratings &amp; Reviews</h2>
+      <div id="reviewsList"></div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-section">
+      <h2>Related Products</h2>
+      <div class="related-grid" id="relatedGrid"></div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-nav-bar">
+    <a class="mobile-nav-item" href="home.html">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="mobile-nav-item active" href="#" ontouchstart="location.href='home.html#shop'">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Shop</span>
+    </a>
+    <a class="mobile-nav-item" href="orders.html">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // ---------------- Cart helpers (shared with home via localStorage) ----------------
+    function currentCartKey() {
+      let uid = "guest";
+      try { uid = sessionStorage.getItem("currentUid") || "guest"; } catch (e) {}
+      return "cartItems_" + uid;
+    }
+    function loadCart() {
+      try { return JSON.parse(localStorage.getItem(currentCartKey()) || "[]"); } catch (e) { return []; }
+    }
+    function saveCart(cart) { localStorage.setItem(currentCartKey(), JSON.stringify(cart)); }
+
+    function updateCartCount() {
+      const cart = loadCart();
+      const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+      const el = document.getElementById("cartCount");
+      if (el) el.textContent = count;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    // ---------------- State ----------------
+    let currentProduct = null;
+    let qty = 1;
+
+    // ---------------- URL params -> product ----------------
+    function getParams() {
+      const qs = new URLSearchParams(window.location.search);
+      return {
+        id: qs.get("id") || qs.get("name") || ""
+      };
+    }
+
+    function starsHtml(rating) {
+      const full = Math.round(rating);
+      let s = "";
+      for (let i = 1; i <= 5; i++) s += (i <= full) ? "★" : "☆";
+      return s;
+    }
+
+    // ---------------- Reviews ----------------
+    const REVIEW_POOL = [
+      { name: "Priya S.", stars: 5, date: "2 days ago", text: "Absolutely loved it! The quality feels premium and it lasted way longer than expected.", avatar: "P" },
+      { name: "Ananya R.", stars: 5, date: "1 week ago", text: "Arrived quickly and packed neatly. Works exactly as described — very happy with this purchase.", avatar: "A" },
+      { name: "Meera K.", stars: 4, date: "2 weeks ago", text: "Great product for the price. Gives a salon-like finish at home.", avatar: "M" },
+      { name: "Sahana T.", stars: 4, date: "3 weeks ago", text: "Nice quality and easy to use. Would definitely recommend to someone starting out.", avatar: "S" },
+      { name: "Riya N.", stars: 5, date: "1 month ago", text: "Beautiful finish and very durable. Already ordered another for my sister!", avatar: "R" },
+      { name: "Kavya D.", stars: 3, date: "1 month ago", text: "Decent product. Packaging could be better but the item itself works well.", avatar: "K" }
+    ];
+
+    function renderReviews(rating) {
+      const list = document.getElementById("reviewsList");
+      let reviews = [];
+      if (rating >= 4.8) {
+        reviews = REVIEW_POOL.slice(0, 3);
+      } else if (rating >= 4.5) {
+        reviews = [REVIEW_POOL[0], REVIEW_POOL[2], REVIEW_POOL[4]];
+      } else {
+        reviews = [REVIEW_POOL[1], REVIEW_POOL[3], REVIEW_POOL[5]];
+      }
+      list.innerHTML = reviews.map(r => `
+        <div class="review-card">
+          <div class="review-head">
+            <div class="review-user">
+              <div class="review-avatar">${r.avatar}</div>
+              <div>
+                <div class="review-name">${r.name}</div>
+                <div class="review-date">${r.date}</div>
+              </div>
+            </div>
+            <div class="review-stars">${starsHtml(r.stars)}</div>
+          </div>
+          <div class="review-text">${r.text}</div>
+        </div>
+      `).join("");
+      const countEl = document.getElementById("ratingCount");
+      if (countEl) countEl.textContent = "(" + (reviews.length * 38) + " verified buyer reviews)";
+    }
+
+    // ---------------- Render product ----------------
+    function renderProduct() {
+      const params = getParams();
+      let idNum = parseInt(params.id, 10);
+      currentProduct = isNaN(idNum) ? window.getProductByName(params.id) : window.getProductById(idNum);
+      if (!currentProduct) {
+        document.getElementById("productMain").innerHTML =
+          '<div style="text-align:center;padding:60px;"><h2>Product not found</h2><p>It may have been removed.</p><a href="home.html" class="btn btn-primary">Back to Shop</a></div>';
+        return;
+      }
+      document.title = currentProduct.name + " | Nail Glam";
+      document.getElementById("productImg").src = currentProduct.image;
+      document.getElementById("productImg").alt = currentProduct.name;
+      document.getElementById("productName").textContent = currentProduct.name;
+      document.getElementById("ratingNum").textContent = currentProduct.rating;
+      document.getElementById("ratingStars").textContent = starsHtml(currentProduct.rating);
+      document.getElementById("ratingCount").textContent = "(" + ((currentProduct.id * 17) % 210 + 40) + " verified buyer reviews)";
+      document.getElementById("productPrice").textContent = window.formatPrice(currentProduct.price);
+      document.getElementById("productCategory").textContent = window.categoryName(currentProduct.category);
+      document.getElementById("productDesc").textContent = currentProduct.desc;
+      document.getElementById("crumbCategory").textContent = window.categoryName(currentProduct.category);
+      document.getElementById("crumbName").textContent = currentProduct.name;
+
+      const badge = document.getElementById("productBadge");
+      if (currentProduct.badge) {
+        badge.textContent = currentProduct.badge;
+        badge.className = "product-badge";
+      } else if (currentProduct.rating >= 4.8) {
+        badge.textContent = "Best Seller 🔥";
+        badge.className = "product-badge rose";
+      } else {
+        badge.textContent = "Highly Rated 🌸";
+        badge.className = "product-badge rose";
+      }
+
+      // specs
+      const specs = [
+        ["Category", window.categoryName(currentProduct.category)],
+        ["Rating", currentProduct.rating + " / 5"],
+        ["Availability", "In Stock"],
+        ["Delivery", "Free delivery by tomorrow"],
+        ["Return", "7-day easy returns"]
+      ];
+      document.getElementById("specList").innerHTML = specs
+        .map(s => `<li><b>${s[0]}:</b> <span>${s[1]}</span></li>`).join("");
+
+      qty = 1;
+      document.getElementById("qtyValue").textContent = qty;
+      renderReviews(currentProduct.rating);
+      renderRelated();
+    }
+
+    // ---------------- Related ----------------
+    function renderRelated() {
+      const grid = document.getElementById("relatedGrid");
+      const related = window.getRelatedProducts(currentProduct, 8);
+      grid.innerHTML = related.map(p => `
+        <a class="related-card" href="product.html?id=${p.id}">
+          <div class="rc-img"><img src="${p.image}" alt="${p.name}" loading="lazy" /></div>
+          <div class="rc-body">
+            <p class="rc-name">${p.name}</p>
+            <div class="rc-meta">
+              <span class="rc-price">${window.formatPrice(p.price)}</span>
+              <span class="rc-star">★ ${p.rating}</span>
+            </div>
+          </div>
+        </a>
+      `).join("");
+    }
+
+    // ---------------- Qty / actions ----------------
+    function changeQty(delta) {
+      qty += delta;
+      if (qty < 1) qty = 1;
+      document.getElementById("qtyValue").textContent = qty;
+    }
+
+    document.getElementById("addToCartBtn").addEventListener("click", () => {
+      if (!currentProduct) return;
+      const cart = loadCart();
+      const existing = cart.find(i => i.name === currentProduct.name);
+      if (existing) existing.qty += qty;
+      else cart.push({ name: currentProduct.name, price: currentProduct.price, qty: qty, image: currentProduct.image });
+      saveCart(cart);
+      updateCartCount();
+      showToast("💅 Added " + currentProduct.name + " to cart!");
+    });
+
+    document.getElementById("buyNowBtn").addEventListener("click", () => {
+      if (!currentProduct) return;
+      const fullImage = new URL(currentProduct.image, window.location.href).href;
+      const params = new URLSearchParams({
+        product: currentProduct.name,
+        price: currentProduct.price * qty,
+        qty: qty,
+        image: fullImage
+      });
+      window.location.href = "payment.html?" + params.toString();
+    });
+
+    // ---------------- Theme toggle ----------------
+    const themeBtn = document.getElementById("themeToggleBtn");
+    function applyTheme() {
+      const dark = localStorage.getItem("theme") === "dark";
+      document.body.classList.toggle("dark-theme", dark);
+      themeBtn.textContent = dark ? "☀️" : "🌙";
+    }
+    themeBtn.addEventListener("click", () => {
+      const dark = document.body.classList.toggle("dark-theme");
+      localStorage.setItem("theme", dark ? "dark" : "light");
+      themeBtn.textContent = dark ? "☀️" : "🌙";
+    });
+
+    updateCartCount();
+    applyTheme();
+    renderProduct();
+  </script>
+</body>
+</html>
