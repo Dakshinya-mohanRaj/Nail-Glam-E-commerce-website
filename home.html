@@ -159,12 +159,9 @@
       transform: scale(1.3);
     }
 
-    /* Container for search & tabs */
-    .search-category-container {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      margin-bottom: 40px;
+    /* Category tabs container */
+    .category-tabs-container {
+      margin-bottom: 30px;
     }
 
     /* Modern Decoupled Search Field */
@@ -292,8 +289,7 @@
     }
     .product-card .img-wrapper {
       width: 100%;
-      aspect-ratio: 1 / 1;
-      height: auto;
+      height: 220px;
       border-radius: 12px;
       overflow: hidden;
       background: #f0f0f0;
@@ -310,20 +306,17 @@
       transform: scale(1.08);
     }
     .product-card .info-wrapper {
-      padding: 12px 4px 6px;
+      padding: 15px 5px 5px;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
     .product-card h3 {
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: var(--text-main);
       margin-bottom: 6px;
       cursor: pointer;
       transition: color 0.3s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .product-card h3:hover {
       color: var(--primary);
@@ -332,47 +325,54 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #ffb100;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .product-card .stars span {
       color: var(--text-muted);
       font-size: 0.8rem;
     }
     .product-card p {
-      display: none; /* Details moved to the product modal */
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .product-card .price-row {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 4px 0 12px;
+      align-items: baseline;
+      gap: 10px;
+      margin-top: auto;
+      margin-bottom: 15px;
     }
     .product-card .price {
-      font-size: 1.15rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: var(--secondary);
     }
     .product-card .original-price {
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       text-decoration: line-through;
       color: var(--text-muted);
     }
     .product-card .discount {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: #4caf50;
     }
     .product-card .card-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 10px;
     }
     .product-card .card-actions button {
-      padding: 9px 6px;
-      font-size: 0.78rem;
+      padding: 10px 5px;
+      font-size: 0.85rem;
       border-radius: 8px;
     }
 
@@ -383,8 +383,6 @@
       border-radius: var(--corner-radius);
       padding: 30px;
       overflow: hidden;
-      max-height: 86vh;
-      overflow-y: auto;
     }
     .close-modal-btn {
       position: absolute;
@@ -457,86 +455,7 @@
       font-size: 0.95rem;
       color: var(--text-muted);
       line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    /* Customer Reviews inside modal */
-    .modal-stars {
-      font-size: 0.85rem;
-      color: #ffb100;
-      margin-left: 4px;
-    }
-    .reviews-section {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border-color);
-    }
-    .reviews-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .reviews-head strong {
-      font-size: 0.95rem;
-      color: var(--text-main);
-    }
-    .reviews-count {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    .reviews-list {
-      max-height: 200px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding-right: 4px;
-    }
-    .review-item {
-      background: var(--bg-surface-solid);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px 14px;
-      text-align: left;
-    }
-    .review-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .review-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .review-name {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
-    .review-stars {
-      font-size: 0.7rem;
-      color: #ffb100;
-    }
-    .review-stars span {
-      color: var(--text-muted);
-    }
-    .review-text {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.45;
+      margin-bottom: 25px;
     }
     .option-picker {
       margin-bottom: 20px;
@@ -547,6 +466,25 @@
       font-weight: 600;
       margin-bottom: 8px;
       color: var(--text-main);
+    }
+    .swatches {
+      display: flex;
+      gap: 10px;
+    }
+    .swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+    .swatch.active {
+      border-color: var(--text-main);
+      box-shadow: 0 0 8px var(--primary-glow);
     }
     .qty-selector {
       display: inline-flex;
@@ -649,92 +587,6 @@
         display: inline-flex;
       }
     }
-
-    /* Mobile-first polish: hero keeps its image (stacked) + fluid search & modal */
-    @media(max-width: 600px) {
-      .hero-carousel {
-        height: 400px;
-      }
-      .carousel-slide {
-        flex-direction: column;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px 12px;
-      }
-      .carousel-media {
-        display: flex;
-        width: 130px;
-        height: 155px;
-        border-radius: 12px;
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
-      }
-      .hero-content {
-        max-width: 100%;
-        text-align: center;
-        margin: 0 auto;
-      }
-      .hero-content .badge {
-        font-size: 0.68rem;
-        margin-bottom: 8px;
-      }
-      .hero-content h2 {
-        font-size: 1.5rem;
-        margin-bottom: 6px;
-      }
-      .hero-content p {
-        font-size: 0.85rem;
-        line-height: 1.4;
-        margin-bottom: 12px;
-      }
-      .carousel-dots {
-        bottom: 12px;
-      }
-      .search-category-container {
-        gap: 18px;
-        margin-bottom: 26px;
-      }
-      .search-wrapper {
-        max-width: 100% !important;
-      }
-    }
-
-    @media(max-width: 480px) {
-      .hero-carousel {
-        height: 380px;
-      }
-      .carousel-media {
-        width: 110px;
-        height: 130px;
-      }
-      .hero-content h2 {
-        font-size: 1.3rem;
-      }
-      .hero-content p {
-        font-size: 0.8rem;
-      }
-      .hero-content .btn {
-        padding: 10px 18px;
-        font-size: 0.8rem;
-      }
-      .modal-card {
-        padding: 22px 16px;
-      }
-      .close-modal-btn {
-        top: 8px;
-        right: 12px;
-        font-size: 1.6rem;
-      }
-      .modal-img-container {
-        height: 180px;
-      }
-      .modal-info h3 {
-        font-size: 1.4rem;
-      }
-      .modal-actions {
-        flex-direction: column;
-        gap: 10px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -831,14 +683,13 @@
       <div class="carousel-dots" id="carouselDots"></div>
     </section>
 
-    <!-- Search & Tabs Navigation -->
-    <div class="search-category-container" id="shop">
-      <search class="search-wrapper">
+    <!-- Category Navigation -->
+    <div class="category-tabs-container" id="shop">
+      <search class="search-wrapper" style="display:none">
         <input type="text" id="searchInput" placeholder="Search premium nail art products..." />
         <span id="searchClearBtn" class="clear-btn">&times;</span>
         <button id="searchBtn" class="btn btn-primary"><span class="search-btn-text">Search</span><span class="search-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span></button>
       </search>
-      
       <div class="category-tabs">
         <button class="tab-btn active" data-category="all">All Items</button>
         <button class="tab-btn" data-category="gels">Gels & Polishes</button>
@@ -1520,16 +1371,18 @@
         <div class="modal-info">
           <span class="modal-badge" id="modalProductBadge">Best Seller</span>
           <h3 id="modalProductTitle">Product Title</h3>
-          <div class="modal-rating">⭐ <span id="modalProductRating">4.8</span> <span class="modal-stars" id="modalStars">★★★★★</span></div>
+          <div class="modal-rating">⭐ <span id="modalProductRating">4.8</span> (Customer Reviews)</div>
           <p class="modal-price" id="modalProductPrice">₹399</p>
           <p class="modal-desc" id="modalProductDesc">Product detailed description...</p>
-
-          <div class="reviews-section">
-            <div class="reviews-head">
-              <strong>Customer Reviews</strong>
-              <span class="reviews-count" id="modalReviewCount"></span>
+          
+          <div class="option-picker">
+            <span class="option-label">Select Color / Shade:</span>
+            <div class="swatches">
+              <span class="swatch active" style="background: #ff69b4;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #ffb6c1;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #e91e63;" onclick="selectSwatch(this)"></span>
+              <span class="swatch" style="background: #7b1fa2;" onclick="selectSwatch(this)"></span>
             </div>
-            <div class="reviews-list" id="modalReviewsList"></div>
           </div>
           
           <div class="option-picker">
@@ -1953,52 +1806,6 @@
       });
     }
 
-    // Customer reviews shown inside the product modal
-    function renderProductReviews(name, rating) {
-      const pool = [
-        { name: 'Priya S.', stars: 5, date: '2 days ago', text: 'Absolutely loved it! The quality feels premium and it lasted way longer than expected.' },
-        { name: 'Ananya R.', stars: 5, date: '1 week ago', text: 'Arrived quickly and packed neatly. Works exactly as described — very happy with this purchase.' },
-        { name: 'Meera K.', stars: 4, date: '2 weeks ago', text: 'Great product for the price. Gives a salon-like finish at home.' },
-        { name: 'Sahana T.', stars: 4, date: '3 weeks ago', text: 'Nice quality and easy to use. Would definitely recommend to someone starting out.' },
-        { name: 'Divya P.', stars: 5, date: '1 month ago', text: 'This is my second order now — definitely repurchasing. 10/10!' },
-        { name: 'Ritika J.', stars: 3, date: '1 month ago', text: 'Decent product, does the job. Took a couple of tries to get comfortable using it.' },
-        { name: 'Kavya N.', stars: 5, date: '2 months ago', text: 'Beautiful finish and great quality. Looks exactly like the photos.' },
-        { name: 'Ishita B.', stars: 4, date: '3 months ago', text: 'Good value for money. The packaging was lovely too — makes a nice gift.' }
-      ];
-
-      // Deterministic pick so each product shows the same reviews every time
-      let seed = 0;
-      const lower = String(name || '').toLowerCase();
-      for (const ch of lower) seed = (seed + ch.charCodeAt(0)) % pool.length;
-
-      const shownStars = Math.max(3, Math.min(5, Math.round(rating || 4)));
-      const reviewCount = Math.floor((rating || 4) * 23) + 12;
-
-      document.getElementById('modalReviewCount').textContent = `${reviewCount} reviews`;
-      document.getElementById('modalStars').textContent = '★'.repeat(Math.max(1, Math.round(rating || 4))) + '☆'.repeat(5 - Math.max(1, Math.round(rating || 4)));
-
-      const listEl = document.getElementById('modalReviewsList');
-      listEl.innerHTML = '';
-      for (let i = 0; i < 3; i++) {
-        const r = pool[(seed + i * 2) % pool.length];
-        const stars = r.stars <= shownStars ? r.stars : shownStars;
-        const starsHtml = '★'.repeat(stars) + '☆'.repeat(5 - stars);
-        const item = document.createElement('div');
-        item.className = 'review-item';
-        item.innerHTML = `
-          <div class="review-top">
-            <div class="review-avatar">${r.name[0]}</div>
-            <div>
-              <div class="review-name">${r.name}</div>
-              <div class="review-stars">${starsHtml} <span>· ${r.date}</span></div>
-            </div>
-          </div>
-          <p class="review-text">${r.text}</p>
-        `;
-        listEl.appendChild(item);
-      }
-    }
-
     // Modal Product Details
     function showProductDetails(name, price, image, desc, rating, category) {
       selectedProductDetails = { name, price, image, desc, rating, category };
@@ -2010,8 +1817,6 @@
       document.getElementById('modalProductPrice').textContent = `₹${price}`;
       document.getElementById('modalProductDesc').textContent = desc;
       document.getElementById('modalProductQty').textContent = activeModalQty;
-
-      renderProductReviews(name, rating);
 
       const badge = document.getElementById('modalProductBadge');
       if (rating >= 4.8) {
@@ -2053,6 +1858,12 @@
       activeModalQty += change;
       if (activeModalQty < 1) activeModalQty = 1;
       document.getElementById('modalProductQty').textContent = activeModalQty;
+    }
+
+    function selectSwatch(swatchEl) {
+      const swatches = swatchEl.parentElement.querySelectorAll('.swatch');
+      swatches.forEach(s => s.classList.remove('active'));
+      swatchEl.classList.add('active');
     }
 
     // Mobile specific layout control
