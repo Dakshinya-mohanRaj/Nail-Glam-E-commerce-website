@@ -292,7 +292,8 @@
     }
     .product-card .img-wrapper {
       width: 100%;
-      height: 220px;
+      aspect-ratio: 1 / 1;
+      height: auto;
       border-radius: 12px;
       overflow: hidden;
       background: #f0f0f0;
@@ -309,17 +310,20 @@
       transform: scale(1.08);
     }
     .product-card .info-wrapper {
-      padding: 15px 5px 5px;
+      padding: 12px 4px 6px;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
     .product-card h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--text-main);
       margin-bottom: 6px;
       cursor: pointer;
       transition: color 0.3s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .product-card h3:hover {
       color: var(--primary);
@@ -328,54 +332,47 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #ffb100;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .product-card .stars span {
       color: var(--text-muted);
       font-size: 0.8rem;
     }
     .product-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 15px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      display: none; /* Details moved to the product modal */
     }
     .product-card .price-row {
       display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-top: auto;
-      margin-bottom: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 4px 0 12px;
     }
     .product-card .price {
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--secondary);
     }
     .product-card .original-price {
-      font-size: 0.9rem;
+      font-size: 0.78rem;
       text-decoration: line-through;
       color: var(--text-muted);
     }
     .product-card .discount {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #4caf50;
     }
     .product-card .card-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     .product-card .card-actions button {
-      padding: 10px 5px;
-      font-size: 0.85rem;
+      padding: 9px 6px;
+      font-size: 0.78rem;
       border-radius: 8px;
     }
 
@@ -386,6 +383,8 @@
       border-radius: var(--corner-radius);
       padding: 30px;
       overflow: hidden;
+      max-height: 86vh;
+      overflow-y: auto;
     }
     .close-modal-btn {
       position: absolute;
@@ -458,7 +457,86 @@
       font-size: 0.95rem;
       color: var(--text-muted);
       line-height: 1.5;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
+    }
+
+    /* Customer Reviews inside modal */
+    .modal-stars {
+      font-size: 0.85rem;
+      color: #ffb100;
+      margin-left: 4px;
+    }
+    .reviews-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    .reviews-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .reviews-head strong {
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+    .reviews-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .reviews-list {
+      max-height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: left;
+    }
+    .review-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .review-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .review-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+    .review-stars {
+      font-size: 0.7rem;
+      color: #ffb100;
+    }
+    .review-stars span {
+      color: var(--text-muted);
+    }
+    .review-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.45;
     }
     .option-picker {
       margin-bottom: 20px;
@@ -1441,9 +1519,17 @@
         <div class="modal-info">
           <span class="modal-badge" id="modalProductBadge">Best Seller</span>
           <h3 id="modalProductTitle">Product Title</h3>
-          <div class="modal-rating">⭐ <span id="modalProductRating">4.8</span> (Customer Reviews)</div>
+          <div class="modal-rating">⭐ <span id="modalProductRating">4.8</span> <span class="modal-stars" id="modalStars">★★★★★</span></div>
           <p class="modal-price" id="modalProductPrice">₹399</p>
           <p class="modal-desc" id="modalProductDesc">Product detailed description...</p>
+
+          <div class="reviews-section">
+            <div class="reviews-head">
+              <strong>Customer Reviews</strong>
+              <span class="reviews-count" id="modalReviewCount"></span>
+            </div>
+            <div class="reviews-list" id="modalReviewsList"></div>
+          </div>
           
           <div class="option-picker">
             <span class="option-label">Select Color / Shade:</span>
@@ -1876,6 +1962,52 @@
       });
     }
 
+    // Customer reviews shown inside the product modal
+    function renderProductReviews(name, rating) {
+      const pool = [
+        { name: 'Priya S.', stars: 5, date: '2 days ago', text: 'Absolutely loved it! The quality feels premium and it lasted way longer than expected.' },
+        { name: 'Ananya R.', stars: 5, date: '1 week ago', text: 'Arrived quickly and packed neatly. Works exactly as described — very happy with this purchase.' },
+        { name: 'Meera K.', stars: 4, date: '2 weeks ago', text: 'Great product for the price. Gives a salon-like finish at home.' },
+        { name: 'Sahana T.', stars: 4, date: '3 weeks ago', text: 'Nice quality and easy to use. Would definitely recommend to someone starting out.' },
+        { name: 'Divya P.', stars: 5, date: '1 month ago', text: 'This is my second order now — definitely repurchasing. 10/10!' },
+        { name: 'Ritika J.', stars: 3, date: '1 month ago', text: 'Decent product, does the job. Took a couple of tries to get comfortable using it.' },
+        { name: 'Kavya N.', stars: 5, date: '2 months ago', text: 'Beautiful finish and great quality. Looks exactly like the photos.' },
+        { name: 'Ishita B.', stars: 4, date: '3 months ago', text: 'Good value for money. The packaging was lovely too — makes a nice gift.' }
+      ];
+
+      // Deterministic pick so each product shows the same reviews every time
+      let seed = 0;
+      const lower = String(name || '').toLowerCase();
+      for (const ch of lower) seed = (seed + ch.charCodeAt(0)) % pool.length;
+
+      const shownStars = Math.max(3, Math.min(5, Math.round(rating || 4)));
+      const reviewCount = Math.floor((rating || 4) * 23) + 12;
+
+      document.getElementById('modalReviewCount').textContent = `${reviewCount} reviews`;
+      document.getElementById('modalStars').textContent = '★'.repeat(Math.max(1, Math.round(rating || 4))) + '☆'.repeat(5 - Math.max(1, Math.round(rating || 4)));
+
+      const listEl = document.getElementById('modalReviewsList');
+      listEl.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const r = pool[(seed + i * 2) % pool.length];
+        const stars = r.stars <= shownStars ? r.stars : shownStars;
+        const starsHtml = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+        const item = document.createElement('div');
+        item.className = 'review-item';
+        item.innerHTML = `
+          <div class="review-top">
+            <div class="review-avatar">${r.name[0]}</div>
+            <div>
+              <div class="review-name">${r.name}</div>
+              <div class="review-stars">${starsHtml} <span>· ${r.date}</span></div>
+            </div>
+          </div>
+          <p class="review-text">${r.text}</p>
+        `;
+        listEl.appendChild(item);
+      }
+    }
+
     // Modal Product Details
     function showProductDetails(name, price, image, desc, rating, category) {
       selectedProductDetails = { name, price, image, desc, rating, category };
@@ -1887,6 +2019,8 @@
       document.getElementById('modalProductPrice').textContent = `₹${price}`;
       document.getElementById('modalProductDesc').textContent = desc;
       document.getElementById('modalProductQty').textContent = activeModalQty;
+
+      renderProductReviews(name, rating);
 
       const badge = document.getElementById('modalProductBadge');
       if (rating >= 4.8) {
