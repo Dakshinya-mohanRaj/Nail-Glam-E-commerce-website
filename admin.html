@@ -376,7 +376,21 @@
 
     @media (max-width: 640px) {
       .header-badge { display: none; }
+      .admin-container {
+        padding: 0 12px 90px;
+        margin: 24px auto;
+      }
       h2.admin-title { font-size: 1.8rem; }
+      .admin-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 14px;
+        margin-bottom: 26px;
+      }
+      .stat-card { padding: 18px 16px; }
+      .stat-value { font-size: 1.9rem; }
+      .admin-controls { flex-direction: column; align-items: stretch; }
+      .admin-search { max-width: none; }
+      .admin-controls .btn { width: 100%; }
       table.admin-table thead { display: none; }
       table.admin-table, table.admin-table tbody, table.admin-table tr, table.admin-table td {
         display: block;
@@ -393,6 +407,7 @@
         border-left: 3px solid var(--border-color);
       }
       .customer-cell { min-width: 0; }
+      .items-cell { flex-wrap: wrap; }
     }
   </style>
 </head>

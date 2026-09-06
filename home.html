@@ -590,6 +590,72 @@
         display: inline-flex;
       }
     }
+
+    /* Mobile-first polish: compact hero, fluid search & modal */
+    @media(max-width: 600px) {
+      .hero-carousel {
+        height: 340px;
+      }
+      .carousel-slide {
+        gap: 0;
+        padding: 1rem;
+      }
+      .carousel-media {
+        display: none; /* text-only hero keeps phones clean */
+      }
+      .hero-content {
+        max-width: 100%;
+        text-align: center;
+        margin: 0 auto;
+      }
+      .hero-content .badge {
+        font-size: 0.7rem;
+      }
+      .hero-content h2 {
+        font-size: 1.6rem;
+      }
+      .hero-content p {
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+      }
+      .search-category-container {
+        gap: 18px;
+        margin-bottom: 26px;
+      }
+      .search-wrapper {
+        max-width: 100% !important;
+      }
+    }
+
+    @media(max-width: 480px) {
+      .hero-content h2 {
+        font-size: 1.4rem;
+      }
+      .hero-content p {
+        font-size: 0.85rem;
+      }
+      .carousel-dots {
+        bottom: 12px;
+      }
+      .modal-card {
+        padding: 22px 16px;
+      }
+      .close-modal-btn {
+        top: 8px;
+        right: 12px;
+        font-size: 1.6rem;
+      }
+      .modal-img-container {
+        height: 180px;
+      }
+      .modal-info h3 {
+        font-size: 1.4rem;
+      }
+      .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>

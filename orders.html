@@ -183,6 +183,61 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+
+    @media(max-width: 600px) {
+      .orders-container {
+        margin: 20px auto;
+        padding: 0 14px 90px;
+      }
+      h2.section-title {
+        font-size: 1.5rem;
+      }
+      .order-card {
+        padding: 16px 14px;
+      }
+      .order-meta-info div {
+        font-size: 0.8rem;
+      }
+      .tracking-timeline {
+        padding: 0;
+        margin: 22px 0 20px;
+      }
+      .step-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+      }
+      .step-label {
+        font-size: 0.68rem;
+        text-align: center;
+      }
+      .timeline-line {
+        margin: 0 -8px;
+        top: -11px;
+      }
+      .ordered-item img {
+        width: 50px;
+        height: 50px;
+      }
+      .ordered-item-info {
+        min-width: 0;
+      }
+      .ordered-item-name {
+        font-size: 0.88rem;
+      }
+      .order-card-footer {
+        font-size: 0.85rem;
+        gap: 8px;
+      }
+    }
+
+    @media(max-width: 400px) {
+      .order-card-header,
+      .order-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
