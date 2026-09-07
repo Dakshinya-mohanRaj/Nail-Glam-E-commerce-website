@@ -39,6 +39,37 @@
     .nav-links { display: flex; align-items: center; gap: 14px; }
     .nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--primary); }
+    .header-cart-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-hover));
+      color: #fff !important;
+      padding: 8px 14px;
+      border-radius: 24px;
+      font-weight: 700 !important;
+      font-size: 0.9rem !important;
+      box-shadow: 0 4px 12px var(--secondary-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .header-cart-btn:hover {
+      color: #fff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--secondary-glow);
+    }
+    .header-cart-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
 
     .container { max-width: 1150px; margin: 0 auto; padding: 24px 16px; }
 
@@ -106,8 +137,45 @@
     .qty-control-btn:hover { border-color: var(--primary); color: var(--primary); }
     .qty-value { font-weight: 700; min-width: 24px; text-align: center; }
 
-    .action-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .action-row .btn { flex: 1; min-width: 150px; padding: 14px; font-size: 1rem; }
+    .action-row { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .purchase-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 15px 18px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      user-select: none;
+    }
+    .add-to-cart-btn {
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-hover));
+      color: #fff;
+      box-shadow: 0 6px 18px var(--secondary-glow);
+    }
+    .add-to-cart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px var(--secondary-glow);
+      filter: brightness(1.06);
+    }
+    .buy-now-btn {
+      background: linear-gradient(135deg, var(--accent), hsl(345, 30%, 28%));
+      color: #fff;
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+    .buy-now-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px var(--accent-glow);
+      filter: brightness(1.08);
+    }
 
     /* Reviews */
     .reviews-section { margin-top: 34px; }
@@ -173,6 +241,8 @@
     @media(max-width: 400px) {
       .nav-logo span { display: none; }
       .related-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-cart-label { display: none; }
+      .header-cart-btn { padding: 8px 10px; }
     }
   </style>
 </head>
@@ -185,7 +255,11 @@
       <span>Nail Glam</span>
     </a>
     <div class="nav-links">
-      <a href="home.html" id="cartBtn">Cart (<span id="cartCount">0</span>)</a>
+      <a href="home.html" class="header-cart-btn" id="cartBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="header-cart-label">Cart</span>
+        <span id="cartCount" class="header-cart-count">0</span>
+      </a>
       <a href="#" id="themeToggleBtn" title="Toggle Theme">🌙</a>
     </div>
   </div>
@@ -235,8 +309,14 @@
         <ul class="spec-list" id="specList"></ul>
 
         <div class="action-row">
-          <button class="btn btn-secondary" id="addToCartBtn">Add to Cart</button>
-          <button class="btn btn-primary" id="buyNowBtn">Buy Now</button>
+          <button class="purchase-btn add-to-cart-btn" id="addToCartBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Add to Cart
+          </button>
+          <button class="purchase-btn buy-now-btn" id="buyNowBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Buy Now
+          </button>
         </div>
       </div>
     </section>
