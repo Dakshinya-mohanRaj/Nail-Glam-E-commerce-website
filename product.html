@@ -334,21 +334,97 @@
     </section>
   </main>
 
+  <!-- Sidebar Cart Drawer (same as home.html) -->
+  <section id="sidebarCart" class="sidebar-cart card-glass">
+    <div class="sidebar-header">
+      <h2>Your Cart 🛍️</h2>
+      <button class="close-sidebar" onclick="toggleSidebar()">✖</button>
+    </div>
+    <div id="cart-items">
+      <div class="empty-cart-msg">Your cart is empty 🌸</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="total" id="cart-total">Total: ₹0</div>
+      <button class="btn btn-primary checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+  </section>
+
+  <!-- Profile Sidebar Drawer (same as home.html) -->
+  <section id="sidebarProfile" class="sidebar-cart card-glass">
+    <div class="sidebar-header">
+      <h2>Profile</h2>
+      <div class="profile-header-actions">
+        <a href="orders.html" class="profile-header-btn" title="My Orders"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></a>
+        <button onclick="location.href='index.html'" class="profile-header-btn" title="Logout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+        <button class="close-sidebar" onclick="toggleProfileSidebar()">✖</button>
+      </div>
+    </div>
+    <div class="profile-sidebar-body">
+      <div class="profile-sidebar-avatar"><span>U</span></div>
+      <p class="profile-edit-hint">Manage your account details</p>
+      <p style="font-size:0.92rem; color:var(--text-muted); text-align:center; margin-bottom:16px;">
+        View your orders and manage your account on the profile page.
+      </p>
+      <div class="profile-field">
+        <label for="pfName">Full Name</label>
+        <input type="text" id="pfName" placeholder="Enter your full name" />
+      </div>
+      <div class="profile-field">
+        <label for="pfEmail">Email</label>
+        <input type="email" id="pfEmail" placeholder="Your email" />
+      </div>
+      <button class="btn btn-primary profile-save-btn" onclick="location.href='orders.html'">Go to My Orders</button>
+    </div>
+  </section>
+
+  <!-- Search Overlay Page (same as home.html) -->
+  <section id="searchOverlay" class="search-overlay">
+    <div class="search-overlay-header">
+      <button class="search-back-btn" onclick="closeSearchOverlay()" title="Back">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <div class="search-input-wrap">
+        <input type="text" id="searchOverlayInput" placeholder="Search products..." autocomplete="off" />
+        <button class="search-clear-overlay" id="searchOverlayClear" onclick="clearSearchOverlayInput()" title="Clear">✖</button>
+      </div>
+    </div>
+    <div class="search-overlay-body">
+      <div id="recentSearchesSection">
+        <div class="search-section-head">
+          <span>Recent Searches</span>
+          <button id="clearRecentBtn" onclick="clearRecentSearches()">Clear All</button>
+        </div>
+        <div id="recentSearchChips" class="recent-chips"></div>
+      </div>
+      <div id="popularSection">
+        <div class="search-section-head"><span>Most Bought</span></div>
+        <div id="popularGrid" class="popular-grid"></div>
+      </div>
+      <div id="searchResultsSection" class="search-results" style="display:none;">
+        <div class="search-section-head"><span id="searchResultsTitle">Results</span></div>
+        <div id="searchResultsList"></div>
+      </div>
+      <div id="searchNoResults" class="search-no-results" style="display:none;">
+        No products found for "<span id="searchNoResultsQuery"></span>"
+      </div>
+    </div>
+  </section>
+
   <!-- Sticky Bottom Navigation (same footer as home.html, all pages) -->
   <nav class="mobile-nav-bar">
-    <div class="mobile-nav-item active" onclick="location.href='home.html'">
+    <div class="mobile-nav-item active" onclick="scrollToTop()">
       <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </div>
-    <div class="mobile-nav-item" onclick="location.href='home.html'">
+    <div class="mobile-nav-item" onclick="openSearchOverlay()">
       <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <span>Search</span>
     </div>
-    <div class="mobile-nav-item" onclick="location.href='home.html#cart'">
+    <div class="mobile-nav-item" onclick="toggleSidebar()">
       <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span>Cart</span>
     </div>
-    <div class="mobile-nav-item" onclick="location.href='orders.html'">
+    <div class="mobile-nav-item" onclick="toggleProfileSidebar()">
       <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>Profile</span>
     </div>
@@ -539,6 +615,243 @@
         image: fullImage
       });
       window.location.href = "payment.html?" + params.toString();
+    });
+
+    // ---------------- Cart drawer (same as home.html) ----------------
+    function updateCartDisplay() {
+      const cap = loadCart();
+      const totalContainer = document.getElementById("cart-total");
+      const itemsContainer = document.getElementById("cart-items");
+      if (!itemsContainer || !totalContainer) return;
+      let total = 0;
+      let totalItems = 0;
+      itemsContainer.innerHTML = "";
+      if (cap.length === 0) {
+        itemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty 🌸</div>';
+      } else {
+        cap.forEach((item, index) => {
+          total += item.price * item.qty;
+          totalItems += item.qty;
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML =
+            '<img src="' + item.image + '" alt="' + item.name + '" />' +
+            '<div class="cart-item-info">' +
+              '<div class="cart-item-name">' + item.name + '</div>' +
+              '<div class="cart-item-price">₹' + item.price + '</div>' +
+              '<div class="cart-item-qty-control">' +
+                '<button class="qty-btn" onclick="modifyCartQty(' + index + ', -1)">-</button>' +
+                '<span>' + item.qty + '</span>' +
+                '<button class="qty-btn" onclick="modifyCartQty(' + index + ', 1)">+</button>' +
+              '</div>' +
+            '</div>' +
+            '<button class="close-sidebar" style="font-size:1.1rem;" onclick="removeCartItem(' + index + ')">✖</button>';
+          itemsContainer.appendChild(div);
+        });
+      }
+      totalContainer.textContent = "Total: ₹" + total;
+      const cartCountEl = document.getElementById("cartCount");
+      if (cartCountEl) cartCountEl.textContent = totalItems;
+    }
+
+    function modifyCartQty(index, change) {
+      const cap = loadCart();
+      cap[index].qty += change;
+      if (cap[index].qty <= 0) cap.splice(index, 1);
+      saveCart(cap);
+      updateCartDisplay();
+      updateCartCount();
+    }
+
+    function removeCartItem(index) {
+      const cap = loadCart();
+      cap.splice(index, 1);
+      saveCart(cap);
+      updateCartDisplay();
+      updateCartCount();
+    }
+
+    function checkout() {
+      const cap = loadCart();
+      if (cap.length === 0) { showToast("⚠️ Your shopping cart is empty!"); return; }
+      saveCart(cap);
+      window.location.href = "payment.html?cart=true";
+    }
+
+    function updateBodyLock() {
+      const cartOpen = document.getElementById("sidebarCart").classList.contains("active");
+      const profileOpen = document.getElementById("sidebarProfile").classList.contains("active");
+      const searchOpen = document.getElementById("searchOverlay").classList.contains("open");
+      document.body.classList.toggle("drawer-open", cartOpen || profileOpen || searchOpen);
+    }
+
+    function toggleSidebar() {
+      document.getElementById("sidebarCart").classList.toggle("active");
+      updateBodyLock();
+      updateCartDisplay();
+    }
+
+    function toggleProfileSidebar() {
+      document.getElementById("sidebarProfile").classList.toggle("active");
+      updateBodyLock();
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ---------------- Search overlay (same as home.html) ----------------
+    const searchOverlay = document.getElementById("searchOverlay");
+    const searchOverlayInput = document.getElementById("searchOverlayInput");
+    const searchOverlayClear = document.getElementById("searchOverlayClear");
+
+    function getRecentSearches() {
+      try { return JSON.parse(localStorage.getItem("recentSearches") || "[]"); } catch (e) { return []; }
+    }
+    function saveRecentSearches(list) {
+      localStorage.setItem("recentSearches", JSON.stringify(list.slice(0, 8)));
+    }
+    function addRecentSearch(q) {
+      if (!q) return;
+      const list = getRecentSearches().filter(s => s.toLowerCase() !== q.toLowerCase());
+      list.unshift(q);
+      saveRecentSearches(list);
+    }
+    function removeRecentSearch(q) {
+      saveRecentSearches(getRecentSearches().filter(s => s.toLowerCase() !== q.toLowerCase()));
+      renderRecentSearches();
+    }
+    function clearRecentSearches() {
+      saveRecentSearches([]);
+      renderRecentSearches();
+    }
+    function renderRecentSearches() {
+      const list = getRecentSearches();
+      const section = document.getElementById("recentSearchesSection");
+      const chips = document.getElementById("recentSearchChips");
+      section.style.display = list.length ? "block" : "none";
+      chips.innerHTML = "";
+      list.forEach(q => {
+        const chip = document.createElement("span");
+        chip.className = "recent-chip";
+        const icon = document.createElement("span");
+        icon.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+        const text = document.createElement("span");
+        text.textContent = q;
+        const close = document.createElement("span");
+        close.className = "recent-chip-close";
+        close.textContent = "✖";
+        close.onclick = (e) => { e.stopPropagation(); removeRecentSearch(q); };
+        chip.onclick = () => applySearchToHome(q);
+        chip.append(icon, text, close);
+        chips.appendChild(chip);
+      });
+    }
+    function renderPopularProducts() {
+      const grid = document.getElementById("popularGrid");
+      grid.innerHTML = "";
+      if (!window.NAIL_PRODUCTS) return;
+      window.NAIL_PRODUCTS.filter(p => p.rating >= 4.8).slice(0, 6).forEach(item => {
+        const div = document.createElement("div");
+        div.className = "popular-item";
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.name;
+        img.loading = "lazy";
+        const info = document.createElement("div");
+        info.className = "popular-item-info";
+        const h = document.createElement("h4");
+        h.textContent = item.name;
+        const p = document.createElement("div");
+        p.className = "popular-price";
+        p.textContent = window.formatPrice(item.price);
+        info.append(h, p);
+        div.append(img, info);
+        div.onclick = () => { closeSearchOverlay(); goToProduct(item.id); };
+        grid.appendChild(div);
+      });
+    }
+    function goToProduct(id) {
+      window.location.href = "product.html?id=" + id;
+    }
+    function renderSearchResults(q) {
+      const resultsSection = document.getElementById("searchResultsSection");
+      const resultsList = document.getElementById("searchResultsList");
+      const noResults = document.getElementById("searchNoResults");
+      const recentSection = document.getElementById("recentSearchesSection");
+      const popularSection = document.getElementById("popularSection");
+      if (!q) {
+        resultsSection.style.display = "none";
+        noResults.style.display = "none";
+        recentSection.style.display = getRecentSearches().length ? "block" : "none";
+        popularSection.style.display = "block";
+        return;
+      }
+      recentSection.style.display = "none";
+      popularSection.style.display = "none";
+      const query = q.toLowerCase();
+      const matches = (window.NAIL_PRODUCTS || []).filter(p =>
+        p.name.toLowerCase().includes(query) || p.short.toLowerCase().includes(query));
+      if (matches.length === 0) {
+        resultsSection.style.display = "none";
+        noResults.style.display = "block";
+        document.getElementById("searchNoResultsQuery").textContent = q;
+        return;
+      }
+      noResults.style.display = "none";
+      resultsSection.style.display = "block";
+      document.getElementById("searchResultsTitle").textContent = "Results (" + matches.length + ")";
+      resultsList.innerHTML = "";
+      matches.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "search-result-row";
+        const icon = document.createElement("span");
+        icon.className = "result-icon";
+        icon.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+        const name = document.createElement("span");
+        name.className = "result-name";
+        name.textContent = item.name;
+        const arrow = document.createElement("span");
+        arrow.className = "result-arrow";
+        arrow.textContent = "›";
+        row.append(icon, name, arrow);
+        row.onclick = () => { addRecentSearch(item.name); closeSearchOverlay(); goToProduct(item.id); };
+        resultsList.appendChild(row);
+      });
+    }
+    function clearSearchOverlayInput() {
+      searchOverlayInput.value = "";
+      searchOverlayClear.style.display = "none";
+      renderSearchResults("");
+      searchOverlayInput.focus();
+    }
+    function openSearchOverlay() {
+      searchOverlay.classList.add("open");
+      searchOverlayInput.value = "";
+      searchOverlayClear.style.display = "none";
+      updateBodyLock();
+      renderRecentSearches();
+      renderPopularProducts();
+      renderSearchResults("");
+      setTimeout(() => { try { searchOverlayInput.focus({ preventScroll: true }); } catch (e) { searchOverlayInput.focus(); } }, 50);
+    }
+    function closeSearchOverlay() {
+      searchOverlay.classList.remove("open");
+      updateBodyLock();
+    }
+    function applySearchToHome(q) {
+      if (!q) return;
+      addRecentSearch(q);
+      closeSearchOverlay();
+      window.location.href = "home.html#shop";
+    }
+    searchOverlayInput.addEventListener("input", () => {
+      const q = searchOverlayInput.value.trim();
+      searchOverlayClear.style.display = q ? "flex" : "none";
+      renderSearchResults(q);
+    });
+    searchOverlayInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { const q = searchOverlayInput.value.trim(); if (q) applySearchToHome(q); }
     });
 
     // ---------------- Theme toggle ----------------
