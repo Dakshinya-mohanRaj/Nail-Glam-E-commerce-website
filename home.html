@@ -989,6 +989,10 @@
       updateCartDisplay();
       initCarousel();
       renderProducts();
+      openCartFromHash();
+
+      // Open cart when arriving via footer cart link (home.html#cart)
+      window.addEventListener('hashchange', openCartFromHash);
       
       // Theme Initializer
       const activeTheme = localStorage.getItem('theme') || 'light';
@@ -1191,6 +1195,19 @@
       const sidebar = document.getElementById('sidebarCart');
       sidebar.classList.toggle('active');
       updateBodyLock();
+    }
+
+    // Open the cart drawer when arriving via footer cart link (home.html#cart)
+    function openCartFromHash() {
+      if (window.location.hash === '#cart') {
+        const sidebar = document.getElementById('sidebarCart');
+        if (sidebar && !sidebar.classList.contains('active')) {
+          sidebar.classList.add('active');
+          updateBodyLock();
+        }
+        // Clear the hash so Home/scroll and repeated taps behave normally
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
 
     function checkout() {
