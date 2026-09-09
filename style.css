@@ -356,11 +356,24 @@ header.app-header .logo-group {
   text-shadow: 0 2px 10px var(--primary-glow);
 }
 header.app-header .logo-group .header-logo {
-  height: 46px;
-  width: 46px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  height: 44px;
+  width: auto;
+  border-radius: 50%;
+  object-fit: contain;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+header.app-header .logo-group .header-logo:hover {
+  transform: scale(1.05);
+}
+header.app-header .logo-group .logo-text {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-shadow: 0 2px 10px var(--primary-glow);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 header.app-header nav.desktop-nav {
@@ -383,6 +396,24 @@ header.app-header .header-actions {
   display: flex;
   align-items: center;
   gap: 1.2rem;
+}
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface-solid);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.theme-toggle-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.1);
 }
 
 /* Profile Button */
@@ -972,6 +1003,23 @@ body.drawer-open {
 .mobile-nav-icon {
   font-size: 1.2rem;
 }
+.mobile-nav-cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
 
 /* ==========================================================================
    5. RESPONSIVE MEDIA QUERIES (Mobile & Web Layout Optimization)
@@ -989,6 +1037,9 @@ body.drawer-open {
   
   header.app-header .profile-btn {
     display: none; /* Bottom nav profile is enough on mobile */
+  }
+  header.app-header .logo-text {
+    display: none; /* Hide brand text on mobile, keep logo icon only */
   }
   
   .mobile-nav-bar {
