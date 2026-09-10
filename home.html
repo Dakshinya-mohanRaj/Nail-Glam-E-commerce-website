@@ -1198,11 +1198,22 @@
       saveCart();
     }
 
+    let savedBodyScrollY = 0;
     function updateBodyLock() {
       const cartOpen = document.getElementById('sidebarCart').classList.contains('active');
       const profileOpen = document.getElementById('sidebarProfile').classList.contains('active');
       const searchOpen = document.getElementById('searchOverlay').classList.contains('open');
-      document.body.classList.toggle('drawer-open', cartOpen || profileOpen || searchOpen);
+      const shouldLock = cartOpen || profileOpen || searchOpen;
+
+      if (shouldLock && !document.body.classList.contains('drawer-open')) {
+        savedBodyScrollY = window.scrollY;
+        document.body.classList.add('drawer-open');
+        document.body.style.top = '-' + savedBodyScrollY + 'px';
+      } else if (!shouldLock && document.body.classList.contains('drawer-open')) {
+        document.body.classList.remove('drawer-open');
+        document.body.style.top = '';
+        window.scrollTo(0, savedBodyScrollY);
+      }
     }
 
     function toggleSidebar() {

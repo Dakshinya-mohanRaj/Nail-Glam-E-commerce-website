@@ -558,10 +558,11 @@ header.app-header .header-actions {
   right: 0;
   bottom: 0;
   z-index: 9990;
-  background: var(--bg-surface);
+  background: var(--bg-surface-solid);
   display: none;
   flex-direction: column;
   animation: overlayFade 0.25s ease;
+  overscroll-behavior: contain;
 }
 .search-overlay.open {
   display: flex;
@@ -577,7 +578,7 @@ header.app-header .header-actions {
   gap: 12px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--border-color);
-  background: var(--bg-surface);
+  background: var(--bg-surface-solid);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -653,6 +654,8 @@ header.app-header .header-actions {
   flex: 1;
   overflow-y: auto;
   padding: 18px;
+  background: var(--bg-surface-solid);
+  overscroll-behavior: contain;
 }
 .search-section-head {
   display: flex;
@@ -837,6 +840,10 @@ header.app-header .header-actions {
 /* Sidebar Drawer Cart */
 body.drawer-open {
   overflow: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 .sidebar-cart {
   position: fixed;
