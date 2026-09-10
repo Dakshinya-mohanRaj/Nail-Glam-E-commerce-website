@@ -1040,6 +1040,17 @@ body.drawer-open {
   header.app-header .logo-text {
     display: none; /* Hide brand text on mobile, keep logo icon only */
   }
+  header.app-header .header-back-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  header.app-header .header-back-btn .header-btn-label {
+    display: none;
+  }
   
   .mobile-nav-bar {
     display: flex; /* Sticky navigation bottom menu active */
