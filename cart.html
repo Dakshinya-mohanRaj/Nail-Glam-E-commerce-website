@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Cart | Nail Glam</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    h2.section-title {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 25px;
+      text-align: center;
+      text-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .cart-container {
+      max-width: 760px;
+      margin: 30px auto;
+      padding: 0 20px 100px;
+    }
+    .cart-page-items {
+      display: flex;
+      flex-direction: column;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .cart-page-items .cart-item {
+      padding: 18px 20px;
+    }
+    .empty-cart-msg {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 1.05rem;
+      color: var(--text-muted, #888);
+      background: var(--bg-surface-solid);
+      border-radius: 14px;
+      border: 1px dashed var(--border-color);
+    }
+    .cart-page-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-top: 24px;
+      background: var(--bg-surface-solid);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .cart-page-total {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: right;
+    }
+    .cart-page-footer .btn {
+      width: 100%;
+    }
+    @media (min-width: 600px) {
+      .cart-page-footer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+      }
+      .cart-page-footer .btn {
+        width: auto;
+        min-width: 200px;
+      }
+      .cart-page-total {
+        margin-right: auto;
+        text-align: left;
+      }
+    }
+    @media (max-width: 600px) {
+      h2.section-title {
+        font-size: 1.5rem;
+      }
+      .cart-container {
+        margin-top: 18px;
+        padding: 0 14px 110px;
+      }
+      .cart-page-items .cart-item {
+        padding: 16px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div id="bubbleContainer">
+    <div class="bubble small pink"></div>
+    <div class="bubble medium purple"></div>
+    <div class="bubble large blue"></div>
+    <div class="bubble small purple"></div>
+    <div class="bubble medium pink"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo-group" onclick="window.location.href='home.html'" style="cursor: pointer;">
+      <img src="nglogo.png" alt="Nail Glam logo" class="header-logo" />
+      <span class="logo-text">Nail Glam</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn btn-secondary header-back-btn" onclick="window.location.href='home.html'">← <span class="header-btn-label">Back to Shop</span></button>
+    </div>
+  </header>
+
+  <!-- Cart Page -->
+  <main class="cart-container">
+    <h2 class="section-title">Your Shopping Cart 🛍️</h2>
+
+    <div class="cart-page-items" id="cartPageItems">
+      <div class="empty-cart-msg">Loading your cart...</div>
+    </div>
+
+    <div class="cart-page-footer">
+      <div class="cart-page-total" id="cartPageTotal">Total: ₹0</div>
+      <button class="btn btn-primary checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      <button class="btn btn-secondary" onclick="window.location.href='home.html'">Continue Shopping</button>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKuFqq1jYeUon9DgqMnaq6vg1tYDdTnPo",
+      authDomain: "website-9a715.firebaseapp.com",
+      projectId: "website-9a715",
+      storageBucket: "website-9a715.firebasestorage.app",
+      messagingSenderId: "1006565436423",
+      appId: "1:1006565436423:web:a97c2176e5ead19a350ea2",
+      measurementId: "G-TC1052C9MT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+      try { sessionStorage.setItem("currentUid", user.uid); } catch (e) {}
+      if (typeof window.reloadCartForUser === "function") window.reloadCartForUser();
+    });
+  </script>
+
+  <!-- Core Cart Logic -->
+  <script>
+    function currentCartKey() {
+      let uid = "guest";
+      try { uid = sessionStorage.getItem("currentUid") || "guest"; } catch (e) {}
+      return "cartItems_" + uid;
+    }
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem(currentCartKey()) || '[]'); } catch (e) { cart = []; }
+
+    function saveCart() {
+      localStorage.setItem(currentCartKey(), JSON.stringify(cart));
+    }
+
+    window.reloadCartForUser = function () {
+      try { cart = JSON.parse(localStorage.getItem(currentCartKey()) || '[]'); } catch (e) { cart = []; }
+      updateCartDisplay();
+    };
+
+    function updateCartDisplay() {
+      const container = document.getElementById('cartPageItems');
+      const totalContainer = document.getElementById('cartPageTotal');
+      container.innerHTML = '';
+      let total = 0;
+      let totalItems = 0;
+
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="empty-cart-msg">Your cart is empty 🌸<br><span style="font-size:0.85rem; opacity:.7;">Discover some gorgeous nail essentials from the shop!</span></div>';
+      } else {
+        cart.forEach((item, index) => {
+          total += item.price * item.qty;
+          totalItems += item.qty;
+
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" />
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">₹${item.price}</div>
+              <div class="cart-item-qty-control">
+                <button class="qty-btn" onclick="modifyCartQty(${index}, -1)">-</button>
+                <span>${item.qty}</span>
+                <button class="qty-btn" onclick="modifyCartQty(${index}, 1)">+</button>
+              </div>
+            </div>
+            <button class="close-sidebar" style="font-size: 1.1rem;" onclick="removeCartItem(${index})">✕</button>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      totalContainer.textContent = `Total: ₹${total}`;
+    }
+
+    function modifyCartQty(index, change) {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function removeCartItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        showToast("⚠️ Your shopping cart is empty!");
+        return;
+      }
+      saveCart();
+      window.location.href = "payment.html?cart=true";
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartDisplay();
+    });
+
+    const bubbles = document.querySelectorAll('.bubble');
+    bubbles.forEach(b => {
+      b.style.left = `${Math.random() * 90}%`;
+      b.style.animationDelay = `${Math.random() * 10}s`;
+    });
+  </script>
+
+  <!-- Sticky Bottom Navigation (same footer as all pages) -->
+  <nav class="mobile-nav-bar">
+    <div class="mobile-nav-item" onclick="location.href='home.html'">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="mobile-nav-item" onclick="location.href='home.html'">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+    </div>
+    <div class="mobile-nav-item active" onclick="location.href='cart.html'">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Cart</span>
+    </div>
+    <div class="mobile-nav-item" onclick="location.href='profile.html'">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </div>
+  </nav>
+
+  <script>
+    (function() {
+      var btn = document.getElementById('themeToggleBtn');
+      function apply() {
+        var dark = localStorage.getItem('theme') === 'dark';
+        document.body.classList.toggle('dark-theme', dark);
+        if (btn) btn.innerHTML = dark
+          ? '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+          : '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      }
+      apply();
+      if (btn) btn.addEventListener('click', function() {
+        var dark = document.body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+        apply();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -985,6 +985,7 @@ body.drawer-open {
   align-items: center;
 }
 .mobile-nav-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -995,9 +996,34 @@ body.drawer-open {
   gap: 4px;
   cursor: pointer;
   transition: color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
-.mobile-nav-item:hover, .mobile-nav-item.active {
+/* Current page indicator: rose tint + top accent bar, ONLY for the real active tab */
+.mobile-nav-item.active {
   color: var(--primary);
+  font-weight: 700;
+}
+.mobile-nav-item.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: var(--primary);
+}
+.mobile-nav-item.active .mobile-nav-icon {
+  filter: drop-shadow(0 0 4px var(--primary-glow));
+}
+@media (hover: hover) {
+  .mobile-nav-item:hover {
+    color: var(--primary);
+  }
 }
 .mobile-nav-icon {
   font-size: 1.2rem;

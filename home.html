@@ -1217,6 +1217,10 @@
     }
 
     function toggleSidebar() {
+      if (window.innerWidth <= 768) {
+        window.location.href = 'cart.html';
+        return;
+      }
       const sidebar = document.getElementById('sidebarCart');
       sidebar.classList.toggle('active');
       updateBodyLock();
@@ -1332,6 +1336,10 @@
       setTimeout(() => searchInput.focus(), 300);
     }
     function toggleProfileSidebar() {
+      if (window.innerWidth <= 768) {
+        window.location.href = 'profile.html';
+        return;
+      }
       document.getElementById('sidebarProfile').classList.toggle('active');
       updateBodyLock();
     }
