@@ -1006,17 +1006,6 @@ body.drawer-open {
   color: var(--primary);
   font-weight: 700;
 }
-.mobile-nav-item.active::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 34px;
-  height: 3px;
-  border-radius: 0 0 4px 4px;
-  background: var(--primary);
-}
 .mobile-nav-item.active .mobile-nav-icon {
   filter: drop-shadow(0 0 4px var(--primary-glow));
 }
