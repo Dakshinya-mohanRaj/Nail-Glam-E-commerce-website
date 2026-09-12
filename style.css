@@ -65,13 +65,17 @@ body.dark-theme {
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg-app);
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
@@ -1115,8 +1119,11 @@ body.drawer-open {
 
 /* 2-column e-commerce grid on mobile (max-width: 600px) */
 @media (max-width: 600px) {
-  html, body {
+  html {
     overflow-x: hidden;
+  }
+  body {
+    overflow-x: clip;
   }
 
   .shop-container {
